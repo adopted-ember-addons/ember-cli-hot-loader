@@ -1,26 +1,68 @@
 # Ember-cli-hot-loader
 
-This README outlines the details of collaborating on this Ember addon.
+An early look at what hot reloading might look like in the ember ecosystem
 
 ## Installation
 
-* `git clone` this repository
-* `npm install`
-* `bower install`
+```
+npm install git://github.com/toranb/ember-cli-hot-loader.git#master -D
+npm install ember-devtools -D
+```
 
-## Running
+Add the hot reload mixin to your app/resolver.js
 
-* `ember serve`
-* Visit your app at http://localhost:4200.
+```js
+import EmberResolver from 'ember-resolver';
+import HotReloadMixin from 'ember-cli-hot-loader/mixins/hot-reload-resolver';
 
-## Running Tests
+const Resolver = EmberResolver.extend(HotReloadMixin);
+export default Resolver;
+```
 
-* `npm test` (Runs `ember try:testall` to test your addon against multiple Ember versions)
-* `ember test`
-* `ember test --server`
+Add the development settings for ember-devtools to your config/environment.js
 
-## Building
+```js
+'ember-devtools': {
+  global: 'devtools',
+  enabled: environment === 'development'
+}
+```
 
-* `ember build`
+## How to use this addon
 
-For more information on using ember-cli, visit [http://ember-cli.com/](http://ember-cli.com/).
+1) Your app must be using pods
+
+```
+note: this project has only been tested with ember 2.4+
+```
+
+2) You must use the hbs function with layout in your components (hbs files are not supported at this time)
+
+```js
+import Ember from 'ember';
+import hbs from 'htmlbars-inline-precompile';
+
+export default Ember.Component.extend({
+  layout: hbs`
+    <h1>hello world</h1>
+  `
+});
+```
+
+3) Update the livereload.js file in `node_modules` by adding `path` as an argument to the line `return this.reloadPage();`
+
+```
+vim node_modules/ember-cli/node_modules/tiny-lr/node_modules/livereload-js/dist/livereload.js
+```
+
+Until the livereload issue below is resolved you will need to hack the reloadPage function to provide path
+
+```
+return this.reloadPage(path);
+```
+
+https://github.com/livereload/livereload-js/issues/58
+
+## Example application
+
+https://github.com/toranb/ember-redux-ddau-example/commit/8e52c51bbfef8802d5485cd83c140090fb7cba0f
