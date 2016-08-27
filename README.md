@@ -5,18 +5,18 @@ An early look at what hot reloading might look like in the ember ecosystem
 ## Installation
 
 ```
-npm install git://github.com/toranb/ember-cli-hot-loader.git#master -D
-npm install ember-devtools -D
+ember install toranb/ember-cli-hot-loader
 ```
 
-Add the hot reload mixin to your app/resolver.js
+During installation Ember CLI will prompt you to update the resolver code. This is required for ember-cli-hot-loader to work. 
+If you have never modified the resolver, you can simply accept the changes or do a diff and update it manually. 
+The final code should look something like:
 
 ```js
-import EmberResolver from 'ember-resolver';
+import Resolver from 'ember-resolver';
 import HotReloadMixin from 'ember-cli-hot-loader/mixins/hot-reload-resolver';
 
-const Resolver = EmberResolver.extend(HotReloadMixin);
-export default Resolver;
+export default Resolver.extend(HotReloadMixin);
 ```
 
 Add the development settings for ember-devtools to your config/environment.js
