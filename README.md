@@ -5,7 +5,7 @@ An early look at what hot reloading might look like in the ember ecosystem
 ## Installation
 
 ```
-ember install toranb/ember-cli-hot-loader
+ember install ember-cli-hot-loader
 ```
 
 During installation Ember CLI will prompt you to update the resolver code. This is required for ember-cli-hot-loader to work. 
