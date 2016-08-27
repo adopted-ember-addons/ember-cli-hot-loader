@@ -1,15 +1,12 @@
-(function () {
-  if (!window.LiveReload) {
-    return;
-  }
-  var appName = document.getElementById('ember-cli-hot-loader-plugin').getAttribute('data-app-name');
+function createPlugin (appName, hotReloadService) {
+
   function Plugin (window, host) {
     this.window = window;
     this.host = host;
-  };
+  }
   Plugin.identifier = 'ember-hot-reload';
   Plugin.version = '1.0'; // Just following the example, this might not be even used
-  Plugin.prototype.reload = function(path, options) {
+  Plugin.prototype.reload = function(path) {
         // TODO: is this needed? Consider removing since it might have undersired effects
     window.runningTests = true;
     var tags = document.getElementsByTagName('script');
@@ -22,11 +19,11 @@
     script.onload = function() {
       setTimeout(function() {
         window.runningTests = false;
-        window.devtools.service('hot-reload').trigger('newChanges', path);
+        hotReloadService.trigger('newChanges', path);
       }, 10);
     };
     script.type = 'text/javascript';
-    script.src = '/assets/' + appName + '.js';
+    script.src = `/assets/${appName}.js`;
     document.body.appendChild(script);
 
     return true;
@@ -36,5 +33,19 @@
       disable: false
     };
   };
+
+  return Plugin;
+}
+
+export function initialize(appInstance) {
+  if (!window.LiveReload) {
+    return;
+  }
+  const Plugin = createPlugin(appInstance.base.name, appInstance.lookup('service:hot-reload'));
   window.LiveReload.addPlugin(Plugin);
-})();
+}
+
+export default {
+  name: 'hot-loader-livereload-plugin',
+  initialize
+};

@@ -19,15 +19,6 @@ import HotReloadMixin from 'ember-cli-hot-loader/mixins/hot-reload-resolver';
 export default Resolver.extend(HotReloadMixin);
 ```
 
-Add the development settings for ember-devtools to your config/environment.js
-
-```js
-'ember-devtools': {
-  global: 'devtools',
-  enabled: environment === 'development'
-}
-```
-
 ## How to use this addon
 
 1) Your app must be using pods
