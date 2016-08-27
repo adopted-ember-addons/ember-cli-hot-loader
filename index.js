@@ -9,32 +9,21 @@ module.exports = {
     },
     included (app) {
         this._super.included(app);
+        // TODO: consider removing this since it adds an unnecessary runtime dependency to all apps
         app.import(app.bowerDirectory + '/ember/ember-template-compiler.js');
     },
-    contentFor: function(type) {
+    isDevelopingAddon () {
+      return true;
+    },
+    contentFor: function(type, config) {
         var environment = this.app.env.toString();
         var appName = this.app.name;
         if (type === 'body-footer') {
+            // TODO: find a better place other than body-footer or add a file instead of inline
             if (environment === 'development') {
                 //hack the reloadPage to take path for now*
                 //https://github.com/livereload/livereload-js/issues/58
-                return "<script>window.LiveReload.reloader.reloadPage = function(path) {" +
-                "window.runningTests = true;" +
-                "var tags = document.getElementsByTagName('script');" +
-                "for (var i = tags.length; i >= 0; i--){" +
-                "if (tags[i] && tags[i].getAttribute('src') != null && tags[i].getAttribute('src').indexOf('" + appName + "') != -1)" +
-                "tags[i].parentNode.removeChild(tags[i]);" +
-                "}" +
-                "var script = document.createElement('script');" +
-                "script.onload = function() {" +
-                "setTimeout(function() {" +
-                "window.runningTests = false;" +
-                "window.devtools.service('hot-reload').trigger('newChanges', path);" +
-                "}, 10)};" +
-                "script.type = 'text/javascript';" +
-                "script.src = '/assets/" + appName + ".js';" +
-                "document.body.appendChild(script);" +
-                "}</script>";
+                return '<script id="ember-cli-hot-loader-plugin" data-app-name="' + appName + '" src="' + config.rootURL + 'ember-cli-hot-loader/livereload-plugin.js"></script>';
             }
         }
     }
