@@ -49,20 +49,6 @@ export default Ember.Component.extend({
 });
 ```
 
-3) Update the livereload.js file in `node_modules` by adding `path` as an argument to the line `return this.reloadPage();`
-
-```
-vim node_modules/ember-cli/node_modules/tiny-lr/node_modules/livereload-js/dist/livereload.js
-```
-
-Until the livereload issue below is resolved you will need to hack the reloadPage function to provide path
-
-```
-return this.reloadPage(path);
-```
-
-https://github.com/livereload/livereload-js/issues/58
-
 ## Example application
 
 https://github.com/toranb/ember-redux-ddau-example/commit/81d5c4d254605dadf5dbf990138fb9f0a42b3a93
