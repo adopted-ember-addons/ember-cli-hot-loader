@@ -65,4 +65,4 @@ https://github.com/livereload/livereload-js/issues/58
 
 ## Example application
 
-https://github.com/toranb/ember-redux-ddau-example/commit/8e52c51bbfef8802d5485cd83c140090fb7cba0f
+https://github.com/toranb/ember-redux-ddau-example/commit/81d5c4d254605dadf5dbf990138fb9f0a42b3a93
