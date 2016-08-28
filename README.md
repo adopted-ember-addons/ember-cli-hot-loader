@@ -19,15 +19,6 @@ import HotReloadMixin from 'ember-cli-hot-loader/mixins/hot-reload-resolver';
 export default Resolver.extend(HotReloadMixin);
 ```
 
-Add the development settings for ember-devtools to your config/environment.js
-
-```js
-'ember-devtools': {
-  global: 'devtools',
-  enabled: environment === 'development'
-}
-```
-
 ## How to use this addon
 
 1) Your app must be using pods
@@ -48,20 +39,6 @@ export default Ember.Component.extend({
   `
 });
 ```
-
-3) Update the livereload.js file in `node_modules` by adding `path` as an argument to the line `return this.reloadPage();`
-
-```
-vim node_modules/ember-cli/node_modules/tiny-lr/node_modules/livereload-js/dist/livereload.js
-```
-
-Until the livereload issue below is resolved you will need to hack the reloadPage function to provide path
-
-```
-return this.reloadPage(path);
-```
-
-https://github.com/livereload/livereload-js/issues/58
 
 ## Example application
 
