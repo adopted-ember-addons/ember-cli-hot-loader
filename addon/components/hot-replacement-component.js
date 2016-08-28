@@ -3,20 +3,32 @@ import HotComponentMixin from 'ember-cli-hot-loader/mixins/hot-component';
 
 const { getOwner } = Ember;
 
-//this function is very pods specific right now - FYI
-function matchingComponent (wrappedComponentName, moduleName) {
-  if(!wrappedComponentName) {
+export function matchesPodConvention (componentName, modulePath) {
+  var filePathArray = modulePath.split('/');
+  var type = filePathArray[filePathArray.length - 3];
+  var componentNameFromPath = filePathArray[filePathArray.length - 2];
+  var fileName = filePathArray[filePathArray.length - 1];
+  return type === 'components' && componentName === componentNameFromPath && fileName === 'component.js';
+}
+export function matchesClassicConvention (componentName, modulePath) {
+  var filePathArray = modulePath.split('/');
+  var type = filePathArray[filePathArray.length - 2];
+  var componentNameFromPath = filePathArray[filePathArray.length - 1].replace(/.js$/, '');
+  return type === 'components' && componentName === componentNameFromPath;
+}
+function matchingComponent (componentName, modulePath) {
+  if(!componentName) {
       return false;
   }
-  var unwrappedComponentName = wrappedComponentName.replace(/-original$/, '');
-  var filePathArray = moduleName.split('/');
-  var componentName = filePathArray[filePathArray.length - 2];
-  return unwrappedComponentName.indexOf(componentName) > -1;
+  // For now we only support standard conventions, later we may have a better 
+  // way to learn from resolver resolutions
+  return matchesClassicConvention(componentName, modulePath) || 
+    matchesPodConvention(componentName, modulePath);
 }
 
-function clearCache (wrapper) {
-  const name = `component:${wrapper.get('wrappedComponentName')}`;
-  const owner = getOwner(wrapper);
+function clearCache (context, componentName) {
+  const name = `component:${componentName}`;
+  const owner = getOwner(context);
   owner.__container__.cache[name] = undefined;
   owner.__container__.factoryCache[name] = undefined;
   owner.__registry__._resolveCache[name] = undefined;
@@ -55,15 +67,23 @@ const HotReplacementComponent = Ember.Component.extend(HotComponentMixin, {
     `);
   }).volatile(),
 
-  __rerenderOnTemplateUpdate (moduleName) {
-      var wrappedComponentName = this.get('wrappedComponentName');
-      if(matchingComponent(wrappedComponentName, moduleName)) {
+  __rerenderOnTemplateUpdate (modulePath) {
+      const baseComponentName = this.get('baseComponentName');
+      const wrappedComponentName = this.get('wrappedComponentName');
+      if(matchingComponent(baseComponentName, modulePath)) {
           this._super(...arguments);
-          clearCache(this);
-          this.set('wrappedComponentName', undefined);
+          clearCache(this, baseComponentName);
+          clearCache(this, wrappedComponentName);
+          this.setProperties({
+            wrappedComponentName: undefined,
+            baseComponentName: undefined
+          });
           this.rerender();
           Ember.run.later(()=> {
-            this.set('wrappedComponentName', wrappedComponentName);
+            this.setProperties({
+              wrappedComponentName: wrappedComponentName,
+              baseComponentName: baseComponentName
+            });
           });
       }
   }
@@ -72,6 +92,7 @@ const HotReplacementComponent = Ember.Component.extend(HotComponentMixin, {
 HotReplacementComponent.reopenClass({
   createClass(OriginalComponentClass, parsedName) {
     const NewComponentClass = HotReplacementComponent.extend({
+      baseComponentName: parsedName.fullNameWithoutType,
       wrappedComponentName: parsedName.fullNameWithoutType + '-original'
     });
     NewComponentClass.reopenClass({
