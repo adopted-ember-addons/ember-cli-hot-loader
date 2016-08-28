@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/toranb/ember-cli-hot-loader.svg?branch=master)](https://travis-ci.org/toranb/ember-cli-hot-loader)
+
 # Ember-cli-hot-loader
 
 An early look at what hot reloading might look like in the ember ecosystem
