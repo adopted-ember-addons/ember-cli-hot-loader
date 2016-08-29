@@ -23,13 +23,11 @@ export default Resolver.extend(HotReloadMixin);
 
 ## How to use this addon
 
-1) Your app must be using pods
-
 ```
 note: this project has only been tested with ember 2.4+
 ```
 
-2) You must use the hbs function with layout in your components (hbs files are not supported at this time)
+1) You must use the hbs function with layout in your components (hbs files are not supported at this time)
 
 ```js
 import Ember from 'ember';
