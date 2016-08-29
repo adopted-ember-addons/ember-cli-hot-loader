@@ -1,0 +1,11 @@
+.js-only-classic1, .js-only-pod1 {
+  background: yellow;
+  width: 10px;
+  height: 10px;
+}
+
+.js-only-classic2, .js-only-pod2 {
+  background: red;
+  width: 10px;
+  height: 10px;
+}

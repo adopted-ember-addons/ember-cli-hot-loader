@@ -41,7 +41,12 @@ export function initialize(appInstance) {
   if (!window.LiveReload) {
     return;
   }
-  const Plugin = createPlugin(appInstance.base.name, appInstance.lookup('service:hot-reload'));
+  let appName = appInstance.base.name;
+  if (appName === 'ember-cli-hot-loader') {
+    // TODO: find a better way to support other addons using the dummy app
+    appName = 'dummy';
+  }
+  const Plugin = createPlugin(appName, appInstance.lookup('service:hot-reload'));
   window.LiveReload.addPlugin(Plugin);
 }
 
