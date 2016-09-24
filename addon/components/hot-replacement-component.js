@@ -72,6 +72,11 @@ const HotReplacementComponent = Ember.Component.extend(HotComponentMixin, {
     `);
   }).volatile(),
 
+  __willLiveReload (event) {
+    if (matchingComponent(this.get('baseComponentName'), event.modulePath)) {
+      event.cancel = true;
+    }
+  },
   __rerenderOnTemplateUpdate (modulePath) {
       const baseComponentName = this.get('baseComponentName');
       const wrappedComponentName = this.get('wrappedComponentName');
