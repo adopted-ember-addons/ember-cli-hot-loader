@@ -8,36 +8,41 @@ export function matchesPodConvention (componentName, modulePath) {
   var type = filePathArray[filePathArray.length - 3];
   var componentNameFromPath = filePathArray[filePathArray.length - 2];
   var fileName = filePathArray[filePathArray.length - 1];
-  return type === 'components' && componentName === componentNameFromPath && fileName === 'component.js';
+  return type === 'components' && componentName === componentNameFromPath && (fileName === 'component.js' || fileName === 'template.hbs');
 }
 export function matchesClassicConvention (componentName, modulePath) {
   var filePathArray = modulePath.split('/');
   var type = filePathArray[filePathArray.length - 2];
-  var componentNameFromPath = filePathArray[filePathArray.length - 1].replace(/.js$/, '');
+  var componentNameFromPath = filePathArray[filePathArray.length - 1].replace(/.js$|.hbs$/, '');
   return type === 'components' && componentName === componentNameFromPath;
 }
 function matchingComponent (componentName, modulePath) {
   if(!componentName) {
       return false;
   }
-  // For now we only support standard conventions, later we may have a better 
+  // For now we only support standard conventions, later we may have a better
   // way to learn from resolver resolutions
-  return matchesClassicConvention(componentName, modulePath) || 
+  return matchesClassicConvention(componentName, modulePath) ||
     matchesPodConvention(componentName, modulePath);
 }
 
 function clearCache (context, componentName) {
-  const name = `component:${componentName}`;
+  const componentFullName = `component:${componentName}`;
+  const templateFullName = `template:components/${componentName}`;
   const owner = getOwner(context);
-  owner.__container__.cache[name] = undefined;
-  owner.__container__.factoryCache[name] = undefined;
-  owner.__registry__._resolveCache[name] = undefined;
-  owner.__registry__._failCache[name] = undefined;
+  function clear (name) {
+    owner.__container__.cache[name] = undefined;
+    owner.__container__.factoryCache[name] = undefined;
+    owner.__registry__._resolveCache[name] = undefined;
+    owner.__registry__._failCache[name] = undefined;
 
-  owner.base.__container__.cache[name] = undefined;
-  owner.base.__container__.factoryCache[name] = undefined;
-  owner.base.__registry__._resolveCache[name] = undefined;
-  owner.base.__registry__._failCache[name] = undefined;
+    owner.base.__container__.cache[name] = undefined;
+    owner.base.__container__.factoryCache[name] = undefined;
+    owner.base.__registry__._resolveCache[name] = undefined;
+    owner.base.__registry__._failCache[name] = undefined;
+  }
+  clear(componentFullName);
+  clear(templateFullName);
 }
 
 const HotReplacementComponent = Ember.Component.extend(HotComponentMixin, {
