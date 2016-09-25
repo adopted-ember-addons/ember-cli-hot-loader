@@ -1,7 +1,7 @@
 import Ember from 'ember';
 import HotComponentMixin from 'ember-cli-hot-loader/mixins/hot-component';
 
-const { getOwner } = Ember;
+import clearCache from 'ember-cli-hot-loader/utils/clear-container-cache';
 
 export function matchesPodConvention (componentName, modulePath) {
   var filePathArray = modulePath.split('/');
@@ -24,25 +24,6 @@ function matchingComponent (componentName, modulePath) {
   // way to learn from resolver resolutions
   return matchesClassicConvention(componentName, modulePath) ||
     matchesPodConvention(componentName, modulePath);
-}
-
-function clearCache (context, componentName) {
-  const componentFullName = `component:${componentName}`;
-  const templateFullName = `template:components/${componentName}`;
-  const owner = getOwner(context);
-  function clear (name) {
-    owner.__container__.cache[name] = undefined;
-    owner.__container__.factoryCache[name] = undefined;
-    owner.__registry__._resolveCache[name] = undefined;
-    owner.__registry__._failCache[name] = undefined;
-
-    owner.base.__container__.cache[name] = undefined;
-    owner.base.__container__.factoryCache[name] = undefined;
-    owner.base.__registry__._resolveCache[name] = undefined;
-    owner.base.__registry__._failCache[name] = undefined;
-  }
-  clear(componentFullName);
-  clear(templateFullName);
 }
 
 const HotReplacementComponent = Ember.Component.extend(HotComponentMixin, {
