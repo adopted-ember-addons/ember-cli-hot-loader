@@ -1,27 +1,33 @@
 import getOwner from 'ember-getowner-polyfill';
 
+function clearIfHasProperty (obj, propertyName) {
+  if (Object.hasOwnProperty.call(obj, propertyName)) {
+    obj[name] = undefined;
+  }
+}
+
 function clear (context, owner, name) {
   if (owner.__container__) {
-    owner.__container__.cache[name] = undefined;
-    owner.__container__.factoryCache[name] = undefined;
-    owner.__registry__._resolveCache[name] = undefined;
-    owner.__registry__._failCache[name] = undefined;
+    clearIfHasProperty(owner.__container__.cache, name);
+    clearIfHasProperty(owner.__container__.factoryCache, name);
+    clearIfHasProperty(owner.__registry__._resolveCache, name);
+    clearIfHasProperty(owner.__registry__._failCache, name);
 
-    owner.base.__container__.cache[name] = undefined;
-    owner.base.__container__.factoryCache[name] = undefined;
-    owner.base.__registry__._resolveCache[name] = undefined;
-    owner.base.__registry__._failCache[name] = undefined;
+    clearIfHasProperty(owner.base.__container__.cache, name);
+    clearIfHasProperty(owner.base.__container__.factoryCache, name);
+    clearIfHasProperty(owner.base.__registry__._resolveCache, name);
+    clearIfHasProperty(owner.base.__registry__._failCache, name);
   } else {
-    context.container.cache[name] = undefined;
-    context.container.factoryCache[name] = undefined;
-    context.container._registry._resolveCache[name] = undefined;
-    context.container._registry._failCache[name] = undefined;
+    clearIfHasProperty(context.container.cache, name);
+    clearIfHasProperty(context.container.factoryCache, name);
+    clearIfHasProperty(context.container._registry._resolveCache, name);
+    clearIfHasProperty(context.container._registry._failCache, name);
     // NOTE: the app's __container__ is the same as context.container. Not needed:
-    // window.Dummy.__container__.cache[name] = undefined;
-    // window.Dummy.__container__.factoryCache[name] = undefined;
+    // clearIfHasProperty(window.Dummy.__container__.cache, name);
+    // clearIfHasProperty(window.Dummy.__container__.factoryCache, name);
     // NOTE: the app's registry, is different than container._registry. We may need this
-    // window.Dummy.registry._resolveCache[name] = undefined;
-    // window.Dummy.registry._failCache[name] = undefined;
+    // clearIfHasProperty(window.Dummy.registry._resolveCache, name);
+    // clearIfHasProperty(window.Dummy.registry._failCache, name);
   }
 }
 
