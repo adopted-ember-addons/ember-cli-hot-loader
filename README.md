@@ -24,22 +24,19 @@ export default Resolver.extend(HotReloadMixin);
 ## How to use this addon
 
 ```
-note: this project has only been tested with ember 2.4+
+note: this project doesn't work yet with ember 2.9 (beta at the moment), but we'll try to fix it before the official release. 
 ```
 
-1) You must use the hbs function with layout in your components (hbs files are not supported at this time)
+After installing it, simply run `ember serve` as usual, any changes you do to supported types, will result in a hotreload (no brower refresh). 
+Any additional changes will result in a regular liveReload. 
 
-```js
-import Ember from 'ember';
-import hbs from 'htmlbars-inline-precompile';
+### Supported Types
 
-export default Ember.Component.extend({
-  layout: hbs`
-    <h1>hello world</h1>
-  `
-});
-```
+At the moment, we only hotreload on component and its templates. 
+[ember-cli-styles-reloader](https://www.npmjs.com/package/ember-cli-styles-reloader) will do the styles for you. For support for other 
+types you can follow https://github.com/toranb/ember-cli-hot-loader/issues/6 
+or help us implement some of those. 
 
 ## Example application
 
-https://github.com/toranb/ember-redux-ddau-example/commit/81d5c4d254605dadf5dbf990138fb9f0a42b3a93
+To see this in action, you can clone this repo and run `ember serve`. 
