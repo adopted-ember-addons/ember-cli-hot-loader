@@ -29,7 +29,7 @@ import Ember from 'ember';
 */
 
 /**
-  The `newChanges` event is fired when we have any JS or HBS changes
+  The `willHotReload` event is fired when we have any JS or HBS changes
   detected by Ember CLI. This gives you an opportunity to handle
   the event.
 
@@ -40,7 +40,7 @@ import Ember from 'ember';
   Ember.Component.extend({
     hotReload: Ember.inject.service(),
     init () {
-      this.get('hotReload').on('newChanges', (modulePath)=>{
+      this.get('hotReload').on('willHotReload', (modulePath)=>{
         if (modulePath.match('foo')) {
           window.alert('bar');
         }
@@ -48,12 +48,12 @@ import Ember from 'ember';
     },
 
     willDestroy () {
-      this.get('hotReload').off('newChanges');
+      this.get('hotReload').off('willHotReload');
     }
   });
   ```
 
-  @event newChanges
+  @event willHotReload
   @param {String} modulePath
   @public
 */
