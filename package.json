@@ -11,7 +11,7 @@
     "start": "ember server",
     "test": "ember try:each"
   },
-  "repository": "",
+  "repository": "toranb/ember-cli-hot-loader",
   "engines": {
     "node": ">= 0.10.0"
   },
