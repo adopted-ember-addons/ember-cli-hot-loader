@@ -2,7 +2,7 @@ import getOwner from 'ember-getowner-polyfill';
 
 function clearIfHasProperty (obj, propertyName) {
   if (Object.hasOwnProperty.call(obj, propertyName)) {
-    obj[name] = undefined;
+    obj[propertyName] = undefined;
   }
 }
 
