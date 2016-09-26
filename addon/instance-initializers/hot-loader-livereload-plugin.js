@@ -10,7 +10,8 @@ function createPlugin (appName, hotReloadService) {
     const cancelableEvent = { modulePath: path, cancel: false};
     hotReloadService.trigger('willLiveReload', cancelableEvent);
     if (cancelableEvent.cancel) {   // Only hotreload if someone canceled the regular reload
-      // TODO: is this needed? Consider removing since it might have undersired effects
+      // Reloading app.js will fire Application.create unless we set this.
+      // TODO: make sure this doesn't break tests
       window.runningTests = true;
       var tags = document.getElementsByTagName('script');
       for (var i = tags.length; i >= 0; i--){
