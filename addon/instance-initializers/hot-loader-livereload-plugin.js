@@ -23,7 +23,7 @@ function createPlugin (appName, hotReloadService) {
       script.onload = function() {
         setTimeout(function() {
           window.runningTests = false;
-          hotReloadService.trigger('newChanges', path);
+          hotReloadService.trigger('willHotReload', path);
         }, 10);
       };
       script.type = 'text/javascript';
