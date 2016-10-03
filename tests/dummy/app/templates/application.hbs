@@ -1,43 +1,24 @@
 <h2>Template</h2>
 From app template: hi
 <h2>mixed-classic</h2>
-{{#hot-replacement-component baseComponentName="mixed-classic"}}
-  {{mixed-classic}}
-{{/hot-replacement-component}}
+{{mixed-classic}}
 <h2>mixed-pod</h2>
-{{#hot-replacement-component baseComponentName="mixed-pod"}}
-  {{mixed-pod}}
-{{/hot-replacement-component}}
+{{mixed-pod}}
 <h2>inline-template-classic</h2>
-{{#hot-replacement-component baseComponentName="inline-template-classic"}}
-  {{inline-template-classic}}
-{{/hot-replacement-component}}
+{{inline-template-classic}}
 <h2>inline-template-pod</h2>
-{{#hot-replacement-component baseComponentName="inline-template-pod"}}
-  {{inline-template-pod}}
-{{/hot-replacement-component}}
+{{inline-template-pod}}
 <h2>js-only-classic</h2>
-JS Only classic:
-{{#hot-replacement-component baseComponentName="js-only-classic"}}
-  {{js-only-classic}}
-{{/hot-replacement-component}}
+{{js-only-classic}}
 <h2>js-only-pod</h2>
-JS Only pod:
-{{#hot-replacement-component baseComponentName="js-only-pod"}}
-  {{js-only-pod}}
-{{/hot-replacement-component}}
+{{js-only-pod}}
 <h2>template-only-classic</h2>
-{{#hot-replacement-component baseComponentName="template-only-classic"}}
-  {{template-only-classic}}
-{{/hot-replacement-component}}
+{{template-only-classic}}
 <h2>template-only-pod</h2>
-{{#hot-replacement-component baseComponentName="template-only-pod"}}
-  {{template-only-pod}}
-{{/hot-replacement-component}}
-{{#hot-replacement-component baseComponentName="positional-params"}}
-  {{#positional-params 1}}
-    From yielded block
-  {{/positional-params}}
-{{/hot-replacement-component}}
+{{template-only-pod}}
+<h2>positional-params</h2>
+{{#positional-params 1}}
+  From yielded block
+{{/positional-params}}
 <h2>component-with-positionalparam-as-string</h2>
 {{component-with-positionalparam-as-string "paramPassedFromApplicationTemplate"}}
