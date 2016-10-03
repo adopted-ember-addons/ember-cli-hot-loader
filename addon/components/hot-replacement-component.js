@@ -1,8 +1,8 @@
 import Ember from 'ember';
 import HotComponentMixin from 'ember-cli-hot-loader/mixins/hot-component';
-
 import clearCache from 'ember-cli-hot-loader/utils/clear-container-cache';
 import clearRequirejs from 'ember-cli-hot-loader/utils/clear-requirejs';
+import layout from '../templates/components/hot-replacement-component';
 
 export function matchesPodConvention (componentName, modulePath) {
   var filePathArray = modulePath.split('/');
@@ -27,39 +27,10 @@ function matchingComponent (componentName, modulePath) {
     matchesPodConvention(componentName, modulePath);
 }
 
-function getPositionalParamsArray (constructor) {
-  const positionalParams = constructor.positionalParams;
-  return typeof(positionalParams) === 'string' ?
-    [positionalParams] :
-    positionalParams;
-}
-
 const HotReplacementComponent = Ember.Component.extend(HotComponentMixin, {
-  parsedName: null,
+  baseComponentName: null,
   tagName: '',
-  layout: Ember.computed(function () {
-    let positionalParams = getPositionalParamsArray(this.constructor).join('');
-    const attributesMap = Object.keys(this.attrs)
-      .filter(key => positionalParams.indexOf(key) === -1)
-      .map(key =>`${key}=${key}`).join(' ');
-    return Ember.HTMLBars.compile(`
-      {{#if hasBlock}}
-        {{#if (hasBlock "inverse")}}
-          {{#component wrappedComponentName ${positionalParams} ${attributesMap} as |a b c d e f g h i j k|}}
-            {{yield a b c d e f g h i j k}}
-          {{else}}
-            {{yield to="inverse"}}
-          {{/component}}
-        {{else}}
-          {{#component wrappedComponentName ${positionalParams} ${attributesMap} as |a b c d e f g h i j k|}}
-            {{yield a b c d e f g h i j k}}
-          {{/component}}
-        {{/if}}
-      {{else}}
-        {{component wrappedComponentName ${positionalParams} ${attributesMap}}}
-      {{/if}}
-    `);
-  }).volatile(),
+  layout,
 
   __willLiveReload (event) {
     const baseComponentName = this.get('baseComponentName');
@@ -70,19 +41,15 @@ const HotReplacementComponent = Ember.Component.extend(HotComponentMixin, {
   },
   __rerenderOnTemplateUpdate (modulePath) {
       const baseComponentName = this.get('baseComponentName');
-      const wrappedComponentName = this.get('wrappedComponentName');
       if(matchingComponent(baseComponentName, modulePath)) {
           this._super(...arguments);
           clearCache(this, baseComponentName);
-          clearCache(this, wrappedComponentName);
           this.setProperties({
-            wrappedComponentName: undefined,
             baseComponentName: undefined
           });
           this.rerender();
           Ember.run.later(()=> {
             this.setProperties({
-              wrappedComponentName: wrappedComponentName,
               baseComponentName: baseComponentName
             });
           });
@@ -90,16 +57,4 @@ const HotReplacementComponent = Ember.Component.extend(HotComponentMixin, {
   }
 });
 
-HotReplacementComponent.reopenClass({
-  createClass(OriginalComponentClass, parsedName) {
-    const NewComponentClass = HotReplacementComponent.extend({
-      baseComponentName: parsedName.fullNameWithoutType,
-      wrappedComponentName: parsedName.fullNameWithoutType + '-original'
-    });
-    NewComponentClass.reopenClass({
-      positionalParams: OriginalComponentClass.positionalParams ? OriginalComponentClass.positionalParams.slice() : []
-    });
-    return NewComponentClass;
-  }
-});
 export default HotReplacementComponent;

@@ -10,16 +10,11 @@ An early look at what hot reloading might look like in the ember ecosystem
 ember install ember-cli-hot-loader
 ```
 
-During installation Ember CLI will prompt you to update the resolver code. This is required for ember-cli-hot-loader to work. 
-If you have never modified the resolver, you can simply accept the changes or do a diff and update it manually. 
-The final code should look something like:
+### Upgrade
 
-```js
-import Resolver from 'ember-resolver';
-import HotReloadMixin from 'ember-cli-hot-loader/mixins/hot-reload-resolver';
-
-export default Resolver.extend(HotReloadMixin);
-```
+If you were using 0.1.1 or prior, you will need to remove any references 
+to `ember-cli-hot-loader/mixins/hot-reload-resolver`, since it's no
+longer required. 
 
 ## How to use this addon
 
