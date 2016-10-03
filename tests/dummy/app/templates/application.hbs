@@ -34,5 +34,10 @@ JS Only pod:
 {{#hot-replacement-component baseComponentName="template-only-pod"}}
   {{template-only-pod}}
 {{/hot-replacement-component}}
+{{#hot-replacement-component baseComponentName="positional-params"}}
+  {{#positional-params 1}}
+    From yielded block
+  {{/positional-params}}
+{{/hot-replacement-component}}
 <h2>component-with-positionalparam-as-string</h2>
 {{component-with-positionalparam-as-string "paramPassedFromApplicationTemplate"}}
