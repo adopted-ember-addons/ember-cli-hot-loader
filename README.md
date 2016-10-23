@@ -23,10 +23,6 @@ export default Resolver.extend(HotReloadMixin);
 
 ## How to use this addon
 
-```
-note: this project doesn't work yet with ember 2.9 (beta at the moment), but we'll try to fix it before the official release. 
-```
-
 After installing it, simply run `ember serve` as usual, any changes you do to supported types, will result in a hotreload (no brower refresh). 
 Any additional changes will result in a regular liveReload. 
 
