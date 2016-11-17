@@ -7,6 +7,10 @@ function clearIfHasProperty (obj, propertyName) {
 }
 
 function clear (context, owner, name) {
+  var environment = owner.lookup('service:-glimmer-environment');
+  if (environment) { // Glimmer2
+    environment._definitionCache.store.clear();
+  }
   if (owner.__container__) {
     clearIfHasProperty(owner.__container__.cache, name);
     clearIfHasProperty(owner.__container__.factoryCache, name);
