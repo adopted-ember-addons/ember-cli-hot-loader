@@ -7,6 +7,11 @@ moduleForAcceptance('Acceptance | Utility | clear container cache');
 // Replace this with your real tests.
 test('it works', function(assert) {
   assert.expect(0);
-  // Just want to make sure this doesn\'t crash in the different versions of Ember
-   clearCache(this.application.__container__.lookup('component:inline-template-pod', 'inline-template-pod'));
+  let done = assert.async();
+  visit('/');
+  andThen(() => {
+    // Just want to make sure this doesn\'t crash in the different versions of Ember
+    clearCache(this.application.__container__.lookup('component:inline-template-pod', 'inline-template-pod'));
+    done();
+  });
 });
