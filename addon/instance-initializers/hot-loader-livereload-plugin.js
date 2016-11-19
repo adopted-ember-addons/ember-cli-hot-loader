@@ -1,4 +1,6 @@
-function createPlugin (appName, hotReloadService) {
+/* global require */
+
+function createPlugin (appName, hotReloadService, rootURL) {
 
   function Plugin (window, host) {
     this.window = window;
@@ -27,7 +29,7 @@ function createPlugin (appName, hotReloadService) {
         }, 10);
       };
       script.type = 'text/javascript';
-      script.src = `/assets/${appName}.js`;
+      script.src = `${rootURL}assets/${appName}.js`;
       document.body.appendChild(script);
 
       return true;
@@ -58,6 +60,14 @@ function getAppName (appInstance) {
   return appInstance.application.name;
 }
 
+function getRootUrl (appName) {
+  let modulePath = `${appName}/config/environment`;
+  if (require._eak_seen[modulePath]) {
+    return require(modulePath).default.rootURL || '/';
+  }
+  return '/';
+}
+
 export function initialize(appInstance) {
   if (!window.LiveReload) {
     return;
@@ -67,7 +77,8 @@ export function initialize(appInstance) {
     // TODO: find a better way to support other addons using the dummy app
     appName = 'dummy';
   }
-  const Plugin = createPlugin(appName, lookup(appInstance, 'service:hot-reload'));
+  let rootURL = getRootUrl(appName);
+  const Plugin = createPlugin(appName, lookup(appInstance, 'service:hot-reload'), rootURL);
   window.LiveReload.addPlugin(Plugin);
 }
 
