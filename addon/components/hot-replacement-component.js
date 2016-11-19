@@ -26,29 +26,36 @@ function matchingComponent (componentName, modulePath) {
     matchesPodConvention(componentName, modulePath);
 }
 
+function getPositionalParamsArray (constructor) {
+  const positionalParams = constructor.positionalParams;
+  return typeof(positionalParams) === 'string' ?
+    [positionalParams] :
+    positionalParams;
+}
+
 const HotReplacementComponent = Ember.Component.extend(HotComponentMixin, {
   parsedName: null,
   tagName: '',
   layout: Ember.computed(function () {
-    const positionalParams = this.constructor.positionalParams;
+    let positionalParams = getPositionalParamsArray(this.constructor).join('');
     const attributesMap = Object.keys(this.attrs)
       .filter(key => positionalParams.indexOf(key) === -1)
       .map(key =>`${key}=${key}`).join(' ');
     return Ember.HTMLBars.compile(`
       {{#if hasBlock}}
         {{#if (hasBlock "inverse")}}
-          {{#component wrappedComponentName ${positionalParams.join(' ')} ${attributesMap} as |a b c d e f g h i j k|}}
+          {{#component wrappedComponentName ${positionalParams} ${attributesMap} as |a b c d e f g h i j k|}}
             {{yield a b c d e f g h i j k}}
           {{else}}
             {{yield to="inverse"}}
           {{/component}}
         {{else}}
-          {{#component wrappedComponentName ${positionalParams.join(' ')} ${attributesMap} as |a b c d e f g h i j k|}}
+          {{#component wrappedComponentName ${positionalParams} ${attributesMap} as |a b c d e f g h i j k|}}
             {{yield a b c d e f g h i j k}}
           {{/component}}
         {{/if}}
       {{else}}
-        {{component wrappedComponentName ${positionalParams.join(' ')} ${attributesMap}}}
+        {{component wrappedComponentName ${positionalParams} ${attributesMap}}}
       {{/if}}
     `);
   }).volatile(),
