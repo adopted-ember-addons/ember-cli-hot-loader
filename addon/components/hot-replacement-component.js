@@ -45,18 +45,18 @@ const HotReplacementComponent = Ember.Component.extend(HotComponentMixin, {
     return Ember.HTMLBars.compile(`
       {{#if hasBlock}}
         {{#if (hasBlock "inverse")}}
-          {{#component wrappedComponentName ${positionalParams} ${attributesMap} as |a b c d e f g h i j k|}}
+          {{#component wrappedComponentName ${positionalParams} ${attributesMap} targetObject=_targetObject as |a b c d e f g h i j k|}}
             {{yield a b c d e f g h i j k}}
           {{else}}
             {{yield to="inverse"}}
           {{/component}}
         {{else}}
-          {{#component wrappedComponentName ${positionalParams} ${attributesMap} as |a b c d e f g h i j k|}}
+          {{#component wrappedComponentName ${positionalParams} ${attributesMap} targetObject=_targetObject as |a b c d e f g h i j k|}}
             {{yield a b c d e f g h i j k}}
           {{/component}}
         {{/if}}
       {{else}}
-        {{component wrappedComponentName ${positionalParams} ${attributesMap}}}
+        {{component wrappedComponentName ${positionalParams} ${attributesMap} targetObject=_targetObject}}
       {{/if}}
     `);
   }).volatile(),
