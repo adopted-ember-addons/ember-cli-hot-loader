@@ -1,4 +1,6 @@
-import getOwner from 'ember-getowner-polyfill';
+import Ember from 'ember';
+
+const { getOwner } = Ember;
 
 function clearIfHasProperty (obj, propertyName) {
   if (Object.hasOwnProperty.call(obj, propertyName)) {
