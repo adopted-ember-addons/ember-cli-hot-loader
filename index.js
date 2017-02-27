@@ -23,10 +23,10 @@ module.exports = {
         // Require template compiler as in CLI this is only used in build, we need it at runtime
         if (fs.existsSync(bowerPath)) {
             app.import(bowerPath);
-        }
-
-        if (fs.existsSync(npmPath)) {
+        } else if (fs.existsSync(npmPath)) {
             app.import(npmPath);
+        } else {
+            throw new Error('Unable to locate ember-template-compiler.js. ember/ember-source not found in either bower_components or node_modules');
         }
     }
 };
