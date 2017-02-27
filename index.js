@@ -17,8 +17,8 @@ module.exports = {
             return;
         }
 
-        const bowerPath = app.bowerDirectory + '/ember/ember-template-compiler.js';
-        const npmPath = app.project.nodeModulesPath + '/ember-source/dist/ember-template-compiler.js';
+        var bowerPath = app.bowerDirectory + '/ember/ember-template-compiler.js';
+        var npmPath = app.project.nodeModulesPath + '/ember-source/dist/ember-template-compiler.js';
 
         // Require template compiler as in CLI this is only used in build, we need it at runtime
         if (fs.existsSync(bowerPath)) {
