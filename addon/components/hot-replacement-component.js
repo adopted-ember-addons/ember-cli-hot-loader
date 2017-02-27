@@ -65,7 +65,7 @@ const HotReplacementComponent = Ember.Component.extend(HotComponentMixin, {
     const baseComponentName = this.get('baseComponentName');
     if (matchingComponent(baseComponentName, event.modulePath)) {
       event.cancel = true;
-      clearRequirejs(baseComponentName);
+      clearRequirejs(this, baseComponentName);
     }
   },
   __rerenderOnTemplateUpdate (modulePath) {
