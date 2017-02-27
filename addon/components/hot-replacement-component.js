@@ -2,6 +2,7 @@ import Ember from 'ember';
 import HotComponentMixin from 'ember-cli-hot-loader/mixins/hot-component';
 
 import clearCache from 'ember-cli-hot-loader/utils/clear-container-cache';
+import clearRequirejs from 'ember-cli-hot-loader/utils/clear-requirejs';
 
 export function matchesPodConvention (componentName, modulePath) {
   var filePathArray = modulePath.split('/');
@@ -61,8 +62,10 @@ const HotReplacementComponent = Ember.Component.extend(HotComponentMixin, {
   }).volatile(),
 
   __willLiveReload (event) {
-    if (matchingComponent(this.get('baseComponentName'), event.modulePath)) {
+    const baseComponentName = this.get('baseComponentName');
+    if (matchingComponent(baseComponentName, event.modulePath)) {
       event.cancel = true;
+      clearRequirejs(baseComponentName);
     }
   },
   __rerenderOnTemplateUpdate (modulePath) {
