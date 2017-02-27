@@ -2,6 +2,9 @@ import Ember from 'ember';
 
 const { getOwner, get } = Ember;
 
+// Access requirejs global
+const requirejs = window.requirejs;
+
 /**
  * Unsee a requirejs module if it exists
  * @param {String} module The requirejs module name
