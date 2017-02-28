@@ -4,16 +4,19 @@
 module.exports = {
     name: 'ember-cli-hot-loader',
     serverMiddleware: function (config){
-        if (config.options.environment === 'development') {
-            var lsReloader = require('./lib/hot-reloader')(config.options);
-            lsReloader.run();
+        // If in production, don't add reloader
+        if (config.options.environment === 'production') {
+            return;
         }
+
+        var lsReloader = require('./lib/hot-reloader')(config.options);
+        lsReloader.run();
     },
     included: function (app) {
         this._super.included(app);
 
-        // If not in dev, bail
-        if (app.env !== 'development') {
+        // If in production, don't add ember-template-compiler
+        if (app.env === 'production') {
             return;
         }
 
