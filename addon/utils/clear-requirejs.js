@@ -20,7 +20,7 @@ export default function clearContainerCache(context, componentName) {
   const config = owner.resolveRegistration('config:environment');
   const appName = get(owner, 'base.name') || get(owner, 'application.name');
   const modulePrefix = get(config, 'modulePrefix') || appName;
-  const podModulePrefix = get(config, 'podModulePrefix');
+  const podModulePrefix = get(config, 'podModulePrefix') || modulePrefix;
 
   // Invalidate regular module
   requireUnsee(`${modulePrefix}/components/${componentName}`);
