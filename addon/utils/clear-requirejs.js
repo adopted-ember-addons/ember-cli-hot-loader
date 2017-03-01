@@ -18,8 +18,7 @@ function requireUnsee(module) {
 export default function clearContainerCache(context, componentName) {
   const owner = getOwner(context);
   const config = owner.resolveRegistration('config:environment');
-  const appName = get(owner, 'base.name') || get(owner, 'application.name');
-  const modulePrefix = get(config, 'modulePrefix') || appName;
+  const modulePrefix = get(config, 'modulePrefix');
   const podModulePrefix = get(config, 'podModulePrefix') || modulePrefix;
 
   // Invalidate regular module
