@@ -12,10 +12,10 @@ export function matchesPodConvention (componentName, modulePath) {
   return type === 'components' && componentName === componentNameFromPath && (fileName === 'component.js' || fileName === 'template.hbs');
 }
 export function matchesClassicConvention (componentName, modulePath) {
-  var filePathArray = modulePath.split('/');
-  var type = filePathArray[filePathArray.length - 2];
-  var componentNameFromPath = filePathArray[filePathArray.length - 1].replace(/.js$|.hbs$/, '');
-  return type === 'components' && componentName === componentNameFromPath;
+  var cleanedModulePath = modulePath.replace('/Users/mmadero/code-zenefits/level-funding-ui/app/templates/', '');
+  cleanedModulePath = cleanedModulePath.replace('/Users/mmadero/code-zenefits/level-funding-ui/app/', '');
+  var modulePathWithoutExtension = cleanedModulePath.replace(/.js$|.hbs$/, '');
+  return `components/${componentName}` === modulePathWithoutExtension;
 }
 function matchingComponent (componentName, modulePath) {
   if(!componentName) {
