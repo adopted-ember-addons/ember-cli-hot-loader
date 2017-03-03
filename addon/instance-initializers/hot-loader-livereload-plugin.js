@@ -29,7 +29,7 @@ function createPlugin (appName, hotReloadService, rootURL) {
         }, 10);
       };
       script.type = 'text/javascript';
-      script.src = `${rootURL}assets/${appName}.js`;
+      script.src = `${rootURL}assets/${appName}.js?${new Date().getTime()}`;
       document.body.appendChild(script);
 
       return true;
