@@ -7,7 +7,15 @@ function removeOriginalFromParsedName (parsedName) {
   parsedName.name= parsedName.name.replace(/-original$/, '');
 }
 
+function looksLikePartial (parsedName) {
+  const nameSegments = parsedName.name.split('/');
+  return nameSegments[nameSegments.length -1].match(/^-/);
+}
+
 function shouldIgnoreTemplate (parsedName) {
+  if (looksLikePartial(parsedName)) {
+    return false; // If it's a partial don't ignore it, simply return the default
+  }
   return parsedName.fullName.match(/template:components\//) && !parsedName.fullName.match(/\-original$/);
 }
 
