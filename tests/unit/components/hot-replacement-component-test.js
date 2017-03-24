@@ -12,8 +12,11 @@ test('matchesPodConvention', function (assert) {
   // TODO: add support for addons
   assert.ok(matchesPodConvention('my-component', 'disk/path/to/app/components/my-component/component.js'));
   assert.ok(matchesPodConvention('template-only-pod', 'disk/path/to/app/components/template-only-pod/template.hbs'));
+  assert.ok(matchesPodConvention('my-component/sub-component', 'disk/path/to/app/components/my-component/sub-component/component.js'));
+  assert.ok(matchesPodConvention('my-component/sub-component', 'disk/path/to/app/components/my-component/sub-component/template.hbs'));
   assert.notOk(matchesPodConvention('different-component', 'disk/path/to/app/components/my-component/component.js'));
   assert.notOk(matchesPodConvention('my-component', 'disk/path/to/app/different-type/my-component/component.js'));
+  assert.notOk(matchesPodConvention('my-component', 'disk/path/to/app/components/different-component/component.js'));
   assert.notOk(matchesPodConvention('my-component', 'disk/path/to/app/components/different-component/component.js'));
 });
 
@@ -21,6 +24,8 @@ test('matchesClassicConvention', function (assert) {
   // TODO: add support for addons
   assert.ok(matchesClassicConvention('my-classic-component', 'disk/path/to/app/components/my-classic-component.js'));
   assert.ok(matchesClassicConvention('template-only-classic', 'disk/path/to/app/app/templates/components/template-only-classic.hbs'));
+  assert.ok(matchesClassicConvention('my-component/sub-component', 'disk/path/to/app/app/components/my-component/sub-component.js'));
+  assert.ok(matchesClassicConvention('my-component/sub-component', 'disk/path/to/app/app/templates/components/my-component/sub-component.hbs'));
   assert.notOk(matchesClassicConvention('different-component', 'disk/path/to/app/components/my-classic-component.js'));
   assert.notOk(matchesClassicConvention('my-classic-component', 'disk/path/to/app/different-type/my-classic-component.js'));
   assert.notOk(matchesClassicConvention('my-classic-component', 'disk/path/to/app/components/different-component.js'));
