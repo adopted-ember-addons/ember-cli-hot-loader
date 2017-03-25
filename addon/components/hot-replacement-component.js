@@ -4,19 +4,39 @@ import HotComponentMixin from 'ember-cli-hot-loader/mixins/hot-component';
 import clearCache from 'ember-cli-hot-loader/utils/clear-container-cache';
 import clearRequirejs from 'ember-cli-hot-loader/utils/clear-requirejs';
 
+function regexEscape(s) {
+  return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+}
+
 export function matchesPodConvention (componentName, modulePath) {
-  var filePathArray = modulePath.split('/');
-  var type = filePathArray[filePathArray.length - 3];
-  var componentNameFromPath = filePathArray[filePathArray.length - 2];
-  var fileName = filePathArray[filePathArray.length - 1];
-  return type === 'components' && componentName === componentNameFromPath && (fileName === 'component.js' || fileName === 'template.hbs');
+  var basePath = 'components/' + componentName;
+  var componentRegexp = new RegExp(regexEscape(basePath + '/component.js') + '$');
+  if (componentRegexp.test(modulePath)) {
+    return true;
+  }
+
+  var templateRegex = new RegExp(regexEscape(basePath + '/template.hbs') + '$');
+  if (templateRegex.test(modulePath)) {
+    return true;
+  }
+
+  return false;
 }
+
 export function matchesClassicConvention (componentName, modulePath) {
-  var filePathArray = modulePath.split('/');
-  var type = filePathArray[filePathArray.length - 2];
-  var componentNameFromPath = filePathArray[filePathArray.length - 1].replace(/.js$|.hbs$/, '');
-  return type === 'components' && componentName === componentNameFromPath;
+  var componentRegexp = new RegExp(regexEscape('components/' + componentName + '.js') + '$');
+  if (componentRegexp.test(modulePath)) {
+    return true;
+  }
+
+  var templateRegexp = new RegExp(regexEscape('templates/components/' + componentName + '.hbs') + '$');
+  if (templateRegexp.test(modulePath)) {
+    return true;
+  }
+
+  return false;
 }
+
 function matchingComponent (componentName, modulePath) {
   if(!componentName) {
       return false;
