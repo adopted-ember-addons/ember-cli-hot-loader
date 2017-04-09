@@ -11,3 +11,19 @@ test('visits dummy page and renders all wrapped components', function(assert) {
     assert.equal(currentURL(), '/');
   });
 });
+
+test('handles closure actions', function (assert) {
+  assert.expect(0);
+  visit('/');
+  andThen(function() {
+    click('.component-with-actions--closure a');
+  });
+});
+
+test('handles classic actions', function (assert) {
+  assert.expect(0);
+  visit('/');
+  andThen(function() {
+    click('.component-with-actions--classic a');
+  });
+});
