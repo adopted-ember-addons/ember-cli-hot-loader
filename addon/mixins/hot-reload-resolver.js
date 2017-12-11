@@ -8,7 +8,7 @@ function removeOriginalFromParsedName (parsedName) {
 }
 
 function shouldIgnoreTemplate (parsedName) {
-  return parsedName.fullName.match(/template:components\//) && !parsedName.fullName.match(/\-original$/);
+  return parsedName.fullName.match(/template:components\//) && !parsedName.fullName.match(/\-original$/); // eslint-disable-line
 }
 
 export default Ember.Mixin.create({
@@ -25,7 +25,7 @@ export default Ember.Mixin.create({
       if (this._resolveOriginalTemplateForComponent(parsedName)) {
         return this._resolveComponent(Ember.Component.extend(), parsedName);
       }
-      if (parsedName.fullName.match(/\-original$/)) {
+      if (parsedName.fullName.match(/\-original$/)) { // eslint-disable-line
         removeOriginalFromParsedName(parsedName);
         return this._super(parsedName);
       }
