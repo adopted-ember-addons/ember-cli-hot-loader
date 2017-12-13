@@ -25,22 +25,6 @@ module.exports = {
           'ember-source': '~2.17.0'
         }
       }
-    },
-    {
-      name: 'ember-beta',
-      bower: {
-        dependencies: {
-          'ember': 'components/ember#beta'
-        },
-        resolutions: {
-          'ember': 'beta'
-        }
-      },
-      npm: {
-        devDependencies: {
-          'ember-source': null
-        }
-      }
     }
   ]
 };
