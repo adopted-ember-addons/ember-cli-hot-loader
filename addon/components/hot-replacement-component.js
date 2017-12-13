@@ -5,7 +5,7 @@ import clearCache from 'ember-cli-hot-loader/utils/clear-container-cache';
 import clearRequirejs from 'ember-cli-hot-loader/utils/clear-requirejs';
 
 function regexEscape(s) {
-  return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+  return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'); // eslint-disable-line
 }
 
 export function matchesPodConvention (componentName, modulePath) {
