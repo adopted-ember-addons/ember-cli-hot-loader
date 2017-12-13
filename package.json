@@ -1,6 +1,6 @@
 {
   "name": "ember-cli-hot-loader",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "The default blueprint for ember-cli addons.",
   "keywords": [
     "ember-addon"
