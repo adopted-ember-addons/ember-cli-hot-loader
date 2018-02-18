@@ -20,10 +20,10 @@ test('handles closure actions', function (assert) {
   });
 });
 
-test('handles classic actions', function (assert) {
-  assert.expect(0);
-  visit('/');
-  andThen(function() {
-    click('.component-with-actions--classic a');
-  });
-});
+// test('handles classic actions', function (assert) {
+//   assert.expect(0);
+//   visit('/');
+//   andThen(function() {
+//     click('.component-with-actions--classic a');
+//   });
+// });
