@@ -2,6 +2,8 @@ import Ember from 'ember';
 
 const { getOwner } = Ember;
 
+var templateOptionsKey = null;
+
 function clearIfHasProperty (obj, propertyName) {
   if (obj && Object.hasOwnProperty.call(obj, propertyName)) {
     obj[propertyName] = undefined;
@@ -12,6 +14,12 @@ function clear (context, owner, name) {
   var environment = owner.lookup('service:-glimmer-environment');
   if (environment) { // Glimmer2
     environment._definitionCache && environment._definitionCache.store && environment._definitionCache.store.clear();
+  }
+  if (templateOptionsKey) { // Ember v3.1.1
+    var templateOptions = owner.lookup(templateOptionsKey);
+    var compileTimeLookup = templateOptions.resolver;
+    var runtimeResolver = compileTimeLookup.resolver;
+    runtimeResolver.componentDefinitionCache.clear();
   }
   if (owner.__container__) {
     clearIfHasProperty(owner.__container__.cache, name);
@@ -37,6 +45,18 @@ function clear (context, owner, name) {
     // NOTE: the app's registry, is different than container._registry. We may need this
     // clearIfHasProperty(window.Dummy.registry._resolveCache, name);
     // clearIfHasProperty(window.Dummy.registry._failCache, name);
+  }
+}
+
+var regex = new RegExp('template-options:main-(.*)');
+export function captureTemplateOptions(parsedName) {
+  if (templateOptionsKey) {
+    return;
+  }
+  var name = parsedName.fullName || '';
+  var matched = name.match(regex);
+  if (matched && matched.length > 0) {
+    templateOptionsKey = name;
   }
 }
 
