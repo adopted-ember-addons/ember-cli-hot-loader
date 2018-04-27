@@ -30,7 +30,7 @@ module.exports = {
       name: 'ember-3.1',
       npm: {
         devDependencies: {
-          'ember-source': '~3.1.0'
+          'ember-source': '~3.1.1'
         }
       }
     }

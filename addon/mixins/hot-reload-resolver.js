@@ -1,5 +1,6 @@
 import Ember from 'ember';
 import HotReplacementComponent from 'ember-cli-hot-loader/components/hot-replacement-component';
+import { captureTemplateOptions } from 'ember-cli-hot-loader/utils/clear-container-cache';
 
 function removeOriginalFromParsedName (parsedName) {
   parsedName.fullName = parsedName.fullName.replace(/-original$/, '');
@@ -13,6 +14,8 @@ function shouldIgnoreTemplate (parsedName) {
 
 export default Ember.Mixin.create({
   resolveOther (parsedName) {
+    captureTemplateOptions(parsedName);
+
     if (parsedName.type === 'template' && shouldIgnoreTemplate(parsedName)) {
       return;
     }
