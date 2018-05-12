@@ -26,6 +26,14 @@ export default Resolver.extend(HotReloadMixin);
 After installing it, simply run `ember serve` as usual, any changes you do to supported types, will result in a hotreload (no brower refresh).
 Any additional changes will result in a regular liveReload.
 
+
+## Example application
+
+An example application that hot reloads styles/components/reducers
+
+https://github.com/toranb/ember-hot-reload-demo
+
+
 ## Configurations and Supported Types
 
 * ember-cli will hot reload styles for you when using ember-cli 2.3+
@@ -39,8 +47,49 @@ ENV['ember-cli-hot-loader'] = {
 }
 ```
 
-## Example application
+Next write a service that will respond to the events `willLiveReload` and `willHotReload`
 
-An example application that hot reloads styles/components/reducers
+```javascript
+import { get } from '@ember/object';
+import { combineReducers } from 'redux';
+import Evented from '@ember/object/evented';
+import Service, { inject as service } from '@ember/service';
+import { getOwner } from '@ember/application';
 
-https://github.com/toranb/ember-hot-reload-demo
+const getReducerModule = function(modulePath, modulePrefix) {
+  const fileNamePattern = new RegExp('(.*)/app/reducers/(.*)');
+  const match = fileNamePattern.exec(modulePath);
+  if (match && match.length === 3) {
+    const reducer = match[2].replace('.js', '');
+    return `${modulePrefix}/reducers/${reducer}`;
+  }
+};
+
+export default Service.extend(Evented, {
+  redux: service(),
+  init () {
+    this._super(...arguments);
+    this.on('willLiveReload', this, 'confirmLiveReload');
+    this.on('willHotReload', this, 'attemptLiveReload');
+    const factory = getOwner(this).factoryFor('config:environment');
+    this.modulePrefix = factory.class.modulePrefix;
+  },
+  confirmLiveReload(event) {
+    const module = getReducerModule(event.modulePath, this.modulePrefix);
+    if (module) {
+      event.cancel = true;
+      window.requirejs.unsee(module);
+    }
+  },
+  attemptLiveReload(modulePath) {
+    const module = getReducerModule(modulePath, this.modulePrefix);
+    if (module) {
+      const redux = get(this, 'redux');
+      const hotReloadedReducer = window.require(module);
+      redux.replaceReducer(combineReducers({
+        todos: hotReloadedReducer['default']
+      }));
+    }
+  }
+});
+```
