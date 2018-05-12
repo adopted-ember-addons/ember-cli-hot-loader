@@ -1,11 +1,16 @@
 import { module } from 'qunit';
 import { test } from 'ember-qunit';
-import { matchesPodConvention, matchesClassicConvention } from 'ember-cli-hot-loader/components/hot-replacement-component';
+import { matchingComponent, matchesPodConvention, matchesClassicConvention } from 'ember-cli-hot-loader/components/hot-replacement-component';
 
 // NOTE: we test the functions of the class, not really the component
 // as a component, for that we'll write integration or acceptance tests
 module('Unit | Component | hot replacement component', {
   unit: true
+});
+
+test('matchingComponent for posix and windows modulePaths', function (assert) {
+  assert.ok(matchingComponent('header-markup', '/Users/billut/code/rando/todomvc/app/templates/components/header-markup.hbs'));
+  assert.ok(matchingComponent('header-markup', '\\Users\\billut\\code\\rando\\todomvc\\app\\templates\\components\\header-markup.hbs'));
 });
 
 test('matchesPodConvention', function (assert) {

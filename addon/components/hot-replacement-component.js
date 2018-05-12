@@ -37,7 +37,7 @@ export function matchesClassicConvention (componentName, modulePath) {
   return false;
 }
 
-function matchingComponent (componentName, modulePath) {
+export function matchingComponent (componentName, modulePath) {
   if(!componentName) {
       return false;
   }
