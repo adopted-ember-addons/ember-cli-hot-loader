@@ -37,14 +37,13 @@ export function matchesClassicConvention (componentName, modulePath) {
   return false;
 }
 
-function matchingComponent (componentName, modulePath) {
+export function matchingComponent (componentName, modulePath) {
   if(!componentName) {
       return false;
   }
-  // For now we only support standard conventions, later we may have a better
-  // way to learn from resolver resolutions
-  return matchesClassicConvention(componentName, modulePath) ||
-    matchesPodConvention(componentName, modulePath);
+  var standardModulePath = modulePath.split('\\').join('/');
+  return matchesClassicConvention(componentName, standardModulePath) ||
+    matchesPodConvention(componentName, standardModulePath);
 }
 
 function getPositionalParamsArray (constructor) {
