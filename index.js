@@ -10,7 +10,7 @@ module.exports = {
       return;
     }
 
-    var lsReloader = require('./lib/hot-reloader')(config.options);
+    var lsReloader = require('./lib/hot-reloader')(config.options, this.supportedTypes);
     lsReloader.run();
   },
   included: function (app) {
@@ -19,6 +19,10 @@ module.exports = {
     if (app.env !== 'development') {
       return;
     }
+
+    var config = app.project.config('development');
+    var addonConfig = config[this.name] || { supportedTypes: ['components'] };
+    this.supportedTypes = addonConfig['supportedTypes'];
 
     var bowerPath = path.join(app.bowerDirectory, 'ember', 'ember-template-compiler.js');
     var npmCompilerPath = path.join('ember-source', 'dist', 'ember-template-compiler.js');
