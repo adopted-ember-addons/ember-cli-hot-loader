@@ -6,7 +6,7 @@ var path = require('path');
 module.exports = {
   name: 'ember-cli-hot-loader',
   serverMiddleware: function (config){
-    if (config.options.environment === 'production') {
+    if (config.options.environment !== 'development') {
       return;
     }
 
@@ -16,7 +16,7 @@ module.exports = {
   included: function (app) {
     this._super.included(app);
 
-    if (app.env === 'production') {
+    if (app.env !== 'development') {
       return;
     }
 
