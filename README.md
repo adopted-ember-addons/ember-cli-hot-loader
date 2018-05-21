@@ -50,46 +50,31 @@ ENV['ember-cli-hot-loader'] = {
 Next write a service that will respond to the events `willLiveReload` and `willHotReload`
 
 ```javascript
-import { get } from '@ember/object';
-import { combineReducers } from 'redux';
+import Service from '@ember/service';
 import Evented from '@ember/object/evented';
-import Service, { inject as service } from '@ember/service';
-import { getOwner } from '@ember/application';
-
-const getReducerModule = function(modulePath, modulePrefix) {
-  const fileNamePattern = new RegExp('(.*)/app/reducers/(.*)');
-  const match = fileNamePattern.exec(modulePath);
-  if (match && match.length === 3) {
-    const reducer = match[2].replace('.js', '');
-    return `${modulePrefix}/reducers/${reducer}`;
-  }
-};
 
 export default Service.extend(Evented, {
-  redux: service(),
   init () {
     this._super(...arguments);
     this.on('willLiveReload', this, 'confirmLiveReload');
-    this.on('willHotReload', this, 'attemptLiveReload');
-    const factory = getOwner(this).factoryFor('config:environment');
-    this.modulePrefix = factory.class.modulePrefix;
+    this.on('willHotReload', this, 'attemptHotReload');
   },
   confirmLiveReload(event) {
-    const module = getReducerModule(event.modulePath, this.modulePrefix);
+    const module = getModulePath(event.modulePath);
     if (module) {
       event.cancel = true;
       window.requirejs.unsee(module);
     }
   },
-  attemptLiveReload(modulePath) {
-    const module = getReducerModule(modulePath, this.modulePrefix);
+  attemptHotReload(modulePath) {
+    const module = getModulePath(modulePath);
     if (module) {
-      const redux = get(this, 'redux');
-      const hotReloadedReducer = window.require(module);
-      redux.replaceReducer(combineReducers({
-        todos: hotReloadedReducer['default']
-      }));
+      // re-render, replace module, etc
     }
   }
 });
 ```
+
+## Community Plugins
+
+https://github.com/ember-redux/ember-redux-hot-loader
