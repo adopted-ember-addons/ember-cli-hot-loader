@@ -75,6 +75,41 @@ export default Service.extend(Evented, {
 });
 ```
 
+## Known Compatibility Workarounds
+
+#### Content Security Policy
+
+There is a known issue when used in conjunction with [ember-cli-content-security-policy](https://github.com/rwjblue/ember-cli-content-security-policy) or any strong [Content Security Policy](https://content-security-policy.com/) that blocks `"unsafe-eval"` (as it should).
+
+When this plugin tries to execute the `Ember.HTMLBars.compile` function, a CSP (Content Security Policy) that does not allow `"unsafe-eval"` will block the JS execution with the following error:
+
+```
+Uncaught EvalError: Refused to evaluate a string as JavaScript 
+because 'unsafe-eval' is not an allowed source of script in the 
+following Content Security Policy directive: "script-src ...
+```
+
+To workaround this issue, in the `config/environment.js` file, add `"unsafe-eval"` to the Development and Test environment sections. Do NOT just add `"unsafe-eval"` to the CSP that goes to Production as this will defeat one of the main safeguards that comes from using a CSP. Here is sample code to add to the CSP in the proper environments only:
+
+```
+  // config/environment.js
+  ENV.contentSecurityPolicy = {
+    // normal CSP for Production here
+  }
+
+  if (environment === 'development') {
+    // ...
+    // Allow unsafe eval on dev environment
+    ENV.contentSecurityPolicy['script-src'].push("'unsafe-eval'");
+  }
+
+  if (environment === 'test') {
+    // ...
+    // Allow unsafe eval on test environment
+    ENV.contentSecurityPolicy['script-src'].push("'unsafe-eval'");
+  }
+```
+
 ## Community Plugins
 
 https://github.com/ember-redux/ember-redux-hot-loader
