@@ -58,7 +58,8 @@ const HotReplacementComponent = Ember.Component.extend(HotComponentMixin, {
   tagName: '',
   layout: Ember.computed(function () {
     let positionalParams = getPositionalParamsArray(this.constructor).join('');
-    const attributesMap = Object.keys(this.attrs)
+    let attrs = this.attrs || {};
+    const attributesMap = Object.keys(attrs)
       .filter(key => positionalParams.indexOf(key) === -1)
       .map(key =>`${key}=${key}`).join(' ');
     return Ember.HTMLBars.compile(`
