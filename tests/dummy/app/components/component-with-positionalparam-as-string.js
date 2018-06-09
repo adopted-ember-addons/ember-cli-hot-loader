@@ -1,7 +1,7 @@
-import Ember from 'ember';
+import Component from '@ember/component';
 import hbs from 'htmlbars-inline-precompile';
 
-const Component = Ember.Component.extend({
+const MyComponent = Component.extend({
   // layout,  // The layout comes from the resoler as classic components do
   param1: 'default value',
   layout: hbs`
@@ -9,8 +9,8 @@ const Component = Ember.Component.extend({
   `,
 });
 
-Component.reopenClass({
+MyComponent.reopenClass({
   positionalParams: 'param1'
 });
 
-export default Component;
+export default MyComponent;
