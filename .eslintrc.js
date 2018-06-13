@@ -22,6 +22,7 @@ module.exports = {
         'testem.js',
         'ember-cli-build.js',
         'config/**/*.js',
+        'blueprints/*/index.js',
         'tests/dummy/config/**/*.js'
       ],
       excludedFiles: [
