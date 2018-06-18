@@ -42,8 +42,9 @@ export function matchingComponent (componentName, modulePath) {
       return false;
   }
   var standardModulePath = modulePath.split('\\').join('/');
-  return matchesClassicConvention(componentName, standardModulePath) ||
-    matchesPodConvention(componentName, standardModulePath);
+  var javascriptPath = standardModulePath.replace(/\.ts$/, '.js');
+  return matchesClassicConvention(componentName, javascriptPath) ||
+    matchesPodConvention(componentName, javascriptPath);
 }
 
 function getPositionalParamsArray (constructor) {
