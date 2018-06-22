@@ -13,6 +13,13 @@ test('matchingComponent for posix and windows modulePaths', function (assert) {
   assert.ok(matchingComponent('header-markup', '\\Users\\billut\\code\\rando\\todomvc\\app\\templates\\components\\header-markup.hbs'));
 });
 
+test('typescript matches found', function (assert) {
+  assert.ok(matchingComponent('my-component', 'disk/path/to/app/components/my-component/component.ts'));
+  assert.ok(matchingComponent('my-component/sub-component', 'disk/path/to/app/components/my-component/sub-component/component.ts'));
+  assert.ok(matchingComponent('my-classic-component', 'disk/path/to/app/components/my-classic-component.ts'));
+  assert.ok(matchingComponent('my-component/sub-component', 'disk/path/to/app/app/components/my-component/sub-component.ts'));
+});
+
 test('matchesPodConvention', function (assert) {
   // TODO: add support for addons
   assert.ok(matchesPodConvention('my-component', 'disk/path/to/app/components/my-component/component.js'));
