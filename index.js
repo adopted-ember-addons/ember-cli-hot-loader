@@ -2,6 +2,7 @@
 'use strict';
 var fs = require('fs');
 var path = require('path');
+var map = require('broccoli-stew').map;
 
 module.exports = {
   name: 'ember-cli-hot-loader',
@@ -36,5 +37,19 @@ module.exports = {
     } else {
       throw new Error('Unable to locate ember-template-compiler.js. ember/ember-source not found in either bower_components or node_modules');
     }
+  },
+
+  treeFor(name) {
+    if (this.app.env === 'production' || this.app.env === 'test') {
+      if (name === 'app' || name === 'addon') {
+        const noopResolverMixin = 'define(\'ember-cli-hot-loader/mixins/hot-reload-resolver\', [\'exports\'], function (exports) { \'use strict\'; Object.defineProperty(exports, "__esModule", { value: true }); exports.default = Ember.Mixin.create({}); });';
+        const resolverMixin = 'ember-cli-hot-loader/mixins/hot-reload-resolver.js';
+        return map(this._super.treeFor.apply(this, arguments), (content, path) => {
+          return path === resolverMixin ? noopResolverMixin : content;
+        });
+      }
+      return;
+    }
+    return this._super.treeFor.apply(this, arguments);
   }
 };
