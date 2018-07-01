@@ -1,7 +1,8 @@
-import Ember from 'ember';
+import Mixin from '@ember/object/mixin';
+import { inject as service } from '@ember/service';
 
-export default Ember.Mixin.create({
-  hotReload: Ember.inject.service(),
+export default Mixin.create({
+  hotReload: service(),
   init () {
     this._super(...arguments);
     this.get('hotReload').on('willHotReload', this, '__rerenderOnTemplateUpdate');

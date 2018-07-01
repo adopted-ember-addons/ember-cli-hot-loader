@@ -1,6 +1,5 @@
-import Ember from 'ember';
-
-const { getOwner, get } = Ember;
+import { get } from '@ember/object';
+import { getOwner } from '@ember/application';
 
 /**
  * Unsee a requirejs module if it exists

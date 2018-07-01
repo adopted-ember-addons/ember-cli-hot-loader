@@ -13,7 +13,6 @@ function createPlugin (appName, hotReloadService, rootURL) {
     hotReloadService.trigger('willLiveReload', cancelableEvent);
     if (cancelableEvent.cancel) {   // Only hotreload if someone canceled the regular reload
       // Reloading app.js will fire Application.create unless we set this.
-      // TODO: make sure this doesn't break tests
       window.runningTests = true;
       var tags = document.getElementsByTagName('script');
       for (var i = tags.length; i >= 0; i--){

@@ -1,4 +1,7 @@
 import Ember from 'ember';
+import { later } from '@ember/runloop';
+import Component from '@ember/component';
+import { computed } from '@ember/object';
 import HotComponentMixin from 'ember-cli-hot-loader/mixins/hot-component';
 
 import clearCache from 'ember-cli-hot-loader/utils/clear-container-cache';
@@ -54,10 +57,9 @@ function getPositionalParamsArray (constructor) {
     positionalParams;
 }
 
-const HotReplacementComponent = Ember.Component.extend(HotComponentMixin, {
+const HotReplacementComponent = Component.extend(HotComponentMixin, {
   parsedName: null,
-  tagName: '',
-  layout: Ember.computed(function () {
+  layout: computed(function () {
     let positionalParams = getPositionalParamsArray(this.constructor).join('');
     let attrs = this.attrs || {};
     const attributesMap = Object.keys(attrs)
@@ -66,18 +68,18 @@ const HotReplacementComponent = Ember.Component.extend(HotComponentMixin, {
     return Ember.HTMLBars.compile(`
       {{#if hasBlock}}
         {{#if (hasBlock "inverse")}}
-          {{#component wrappedComponentName ${positionalParams} ${attributesMap} targetObject=_targetObject as |a b c d e f g h i j k|}}
+          {{#component wrappedComponentName ${positionalParams} ${attributesMap} target=target as |a b c d e f g h i j k|}}
             {{yield a b c d e f g h i j k}}
           {{else}}
             {{yield to="inverse"}}
           {{/component}}
         {{else}}
-          {{#component wrappedComponentName ${positionalParams} ${attributesMap} targetObject=_targetObject as |a b c d e f g h i j k|}}
+          {{#component wrappedComponentName ${positionalParams} ${attributesMap} target=target as |a b c d e f g h i j k|}}
             {{yield a b c d e f g h i j k}}
           {{/component}}
         {{/if}}
       {{else}}
-        {{component wrappedComponentName ${positionalParams} ${attributesMap} targetObject=_targetObject}}
+        {{component wrappedComponentName ${positionalParams} ${attributesMap} target=target}}
       {{/if}}
     `);
   }).volatile(),
@@ -101,7 +103,7 @@ const HotReplacementComponent = Ember.Component.extend(HotComponentMixin, {
             baseComponentName: undefined
           });
           this.rerender();
-          Ember.run.later(()=> {
+          later(() => {
             this.setProperties({
               wrappedComponentName: wrappedComponentName,
               baseComponentName: baseComponentName
