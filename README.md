@@ -21,10 +21,11 @@ import HotReloadMixin from 'ember-cli-hot-loader/mixins/hot-reload-resolver';
 export default Resolver.extend(HotReloadMixin);
 ```
 
+note: The HotReloadMixin is replaced with an empty Mixin for production/test builds
+
 ## How to use this addon
 
-After installing it, simply run `ember serve` as usual, any changes you do to supported types, will result in a hotreload (no brower refresh).
-Any additional changes will result in a regular liveReload.
+After the ember install simply run `ember serve` as you normally would. Any changes to component JS/HBS files will result in a hot reload (not a full page reload). If you alter a route, service, controller or controller template ember-cli will do a full page reload.
 
 
 ## Example application
@@ -42,8 +43,10 @@ https://github.com/toranb/ember-hot-reload-demo
 
 ```javascript
 //my-app/config/environment.js
-ENV['ember-cli-hot-loader'] = {
-  supportedTypes: ['components', 'reducers']
+if (environment === 'development') {
+  ENV['ember-cli-hot-loader'] = {
+    supportedTypes: ['components', 'reducers']
+  }
 }
 ```
 
@@ -75,6 +78,10 @@ export default Service.extend(Evented, {
 });
 ```
 
+## Community Plugins
+
+https://github.com/ember-redux/ember-redux-hot-loader
+
 ## Known Compatibility Workarounds
 
 #### Content Security Policy
@@ -84,8 +91,8 @@ There is a known issue when used in conjunction with [ember-cli-content-security
 When this plugin tries to execute the `Ember.HTMLBars.compile` function, a CSP (Content Security Policy) that does not allow `"unsafe-eval"` will block the JS execution with the following error:
 
 ```
-Uncaught EvalError: Refused to evaluate a string as JavaScript 
-because 'unsafe-eval' is not an allowed source of script in the 
+Uncaught EvalError: Refused to evaluate a string as JavaScript
+because 'unsafe-eval' is not an allowed source of script in the
 following Content Security Policy directive: "script-src ...
 ```
 
@@ -109,7 +116,3 @@ To workaround this issue, in the `config/environment.js` file, add `"unsafe-eval
     ENV.contentSecurityPolicy['script-src'].push("'unsafe-eval'");
   }
 ```
-
-## Community Plugins
-
-https://github.com/ember-redux/ember-redux-hot-loader
