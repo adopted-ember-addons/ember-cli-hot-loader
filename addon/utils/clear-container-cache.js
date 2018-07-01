@@ -1,6 +1,4 @@
-import Ember from 'ember';
-
-const { getOwner } = Ember;
+import { getOwner } from '@ember/application';
 
 var templateOptionsKey = null;
 var templateCompilerKey = null;
@@ -12,46 +10,28 @@ function clearIfHasProperty (obj, propertyName) {
 }
 
 function clear (context, owner, name) {
-  var environment = owner.lookup('service:-glimmer-environment');
-  if (environment) { // Glimmer2
-    environment._definitionCache && environment._definitionCache.store && environment._definitionCache.store.clear();
-  }
-  if (templateOptionsKey) { // Ember v3.1.1
-    var templateOptions = owner.lookup(templateOptionsKey);
-    var optionsTimeLookup = templateOptions.resolver;
-    var optionsRuntimeResolver = optionsTimeLookup.resolver;
-    optionsRuntimeResolver.componentDefinitionCache.clear();
-  }
   if (templateCompilerKey) { // Ember v3.2
     var templateCompiler = owner.lookup(templateCompilerKey);
     var compileTimeLookup = templateCompiler.resolver;
     var compileRuntimeResolver = compileTimeLookup.resolver;
     compileRuntimeResolver.componentDefinitionCache.clear();
+  } else if (templateOptionsKey) { // Ember v3.1.1
+    var templateOptions = owner.lookup(templateOptionsKey);
+    var optionsTimeLookup = templateOptions.resolver;
+    var optionsRuntimeResolver = optionsTimeLookup.resolver;
+    optionsRuntimeResolver.componentDefinitionCache.clear();
+  } else {
+    var environment = owner.lookup('service:-glimmer-environment');
+    if (environment) {
+      environment._definitionCache && environment._definitionCache.store && environment._definitionCache.store.clear();
+    }
   }
-  if (owner.__container__) {
-    clearIfHasProperty(owner.__container__.cache, name);
-    clearIfHasProperty(owner.__container__.factoryCache, name);
-    clearIfHasProperty(owner.__container__.factoryManagerCache, name);
-    clearIfHasProperty(owner.__registry__._resolveCache, name);
-    clearIfHasProperty(owner.__registry__._failCache, name);
 
+  if (owner.__container__) {
     clearIfHasProperty(owner.base.__container__.cache, name);
     clearIfHasProperty(owner.base.__container__.factoryCache, name);
     clearIfHasProperty(owner.base.__container__.factoryManagerCache, name);
     clearIfHasProperty(owner.base.__registry__._resolveCache, name);
-    clearIfHasProperty(owner.base.__registry__._failCache, name);
-  } else {
-    clearIfHasProperty(context.container.cache, name);
-    clearIfHasProperty(context.container.factoryCache, name);
-    clearIfHasProperty(context.container.factoryManagerCache, name);
-    clearIfHasProperty(context.container._registry._resolveCache, name);
-    clearIfHasProperty(context.container._registry._failCache, name);
-    // NOTE: the app's __container__ is the same as context.container. Not needed:
-    // clearIfHasProperty(window.Dummy.__container__.cache, name);
-    // clearIfHasProperty(window.Dummy.__container__.factoryCache, name);
-    // NOTE: the app's registry, is different than container._registry. We may need this
-    // clearIfHasProperty(window.Dummy.registry._resolveCache, name);
-    // clearIfHasProperty(window.Dummy.registry._failCache, name);
   }
 }
 

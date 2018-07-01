@@ -1,4 +1,5 @@
-import Ember from 'ember';
+import Service from '@ember/service';
+import Evented from '@ember/object/evented';
 
 /**
   The `willLiveReload` event is fired when we have any JS or HBS changes
@@ -10,7 +11,7 @@ import Ember from 'ember';
 
   ```javascript
   Ember.Something.extend({
-    hotReload: Ember.inject.service(),
+    hotReload: service(),
     init () {
       this.get('hotReload').on('willLiveReload', (event)=>{
         if (event.modulePath.match('foo')) {
@@ -37,8 +38,8 @@ import Ember from 'ember';
   liveReloading, you need to handle the cancelable event `willLiveReload`.
 
   ```javascript
-  Ember.Component.extend({
-    hotReload: Ember.inject.service(),
+  Component.extend({
+    hotReload: service(),
     init () {
       this.get('hotReload').on('willHotReload', (modulePath)=>{
         if (modulePath.match('foo')) {
@@ -59,4 +60,4 @@ import Ember from 'ember';
 */
 
 
-export default Ember.Service.extend(Ember.Evented);
+export default Service.extend(Evented);

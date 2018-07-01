@@ -1,4 +1,5 @@
-import Ember from 'ember';
+import Mixin from '@ember/object/mixin';
+import Component from '@ember/component';
 import HotReplacementComponent from 'ember-cli-hot-loader/components/hot-replacement-component';
 import { captureTemplateOptions } from 'ember-cli-hot-loader/utils/clear-container-cache';
 
@@ -12,7 +13,7 @@ function shouldIgnoreTemplate (parsedName) {
   return parsedName.fullName.match(/template:components\//) && !parsedName.fullName.match(/\-original$/); // eslint-disable-line
 }
 
-export default Ember.Mixin.create({
+export default Mixin.create({
   resolveOther (parsedName) {
     captureTemplateOptions(parsedName);
 
@@ -26,7 +27,7 @@ export default Ember.Mixin.create({
         return this._resolveComponent(resolved, parsedName);
       }
       if (this._resolveOriginalTemplateForComponent(parsedName)) {
-        return this._resolveComponent(Ember.Component.extend(), parsedName);
+        return this._resolveComponent(Component.extend(), parsedName);
       }
       if (parsedName.fullName.match(/\-original$/)) { // eslint-disable-line
         removeOriginalFromParsedName(parsedName);

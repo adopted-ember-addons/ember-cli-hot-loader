@@ -1,17 +1,18 @@
-import Ember from 'ember';
+import { run } from '@ember/runloop';
+import Application from '@ember/application';
 import { initialize } from 'dummy/instance-initializers/hot-loader-livereload-plugin';
 import { module, test } from 'qunit';
 import destroyApp from '../../helpers/destroy-app';
 
 module('Unit | Instance Initializer | hot loader livereload plugin', {
   beforeEach: function() {
-    Ember.run(() => {
-      this.application = Ember.Application.create();
+    run(() => {
+      this.application = Application.create();
       this.appInstance = this.application.buildInstance();
     });
   },
   afterEach: function() {
-    Ember.run(this.appInstance, 'destroy');
+    run(this.appInstance, 'destroy');
     destroyApp(this.application);
   }
 });
