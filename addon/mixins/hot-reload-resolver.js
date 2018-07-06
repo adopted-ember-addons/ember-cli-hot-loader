@@ -60,7 +60,7 @@ export default Mixin.create({
     return this.resolveTemplate(templateParsedName) || this.resolveOther(templateParsedName);
   },
   excluded: computed(function() {
-    const exclude = config['ember-cli-hot-loader']['excluded'];
-    return exclude || [];
+    const configuration = config['ember-cli-hot-loader'];
+    return configuration ? (configuration['excluded'] || []) : [];
   })
 });
