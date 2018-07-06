@@ -27,6 +27,18 @@ note: The HotReloadMixin is replaced with an empty Mixin for production/test bui
 
 After the ember install simply run `ember serve` as you normally would. Any changes to component JS/HBS files will result in a hot reload (not a full page reload). If you alter a route, service, controller or controller template ember-cli will do a full page reload.
 
+## Excluding components
+
+If you want to exclude any component(s) from hot reloading simply configure them using `excluded`
+
+```javascript
+//my-app/config/environment.js
+if (environment === 'development') {
+  ENV['ember-cli-hot-loader'] = {
+    excluded: ['liquid-unless', 'liquid-child']
+  }
+}
+```
 
 ## Example application
 
@@ -35,7 +47,7 @@ An example application that hot reloads styles/components/reducers
 https://github.com/toranb/ember-hot-reload-demo
 
 
-## Configurations and Supported Types
+## Supported Types
 
 * ember-cli will hot reload styles for you when using ember-cli 2.3+
 * ember-cli-hot-loader will hot reload component JS/HBS changes
