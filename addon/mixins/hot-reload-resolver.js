@@ -1,6 +1,8 @@
 import Mixin from '@ember/object/mixin';
 import Component from '@ember/component';
 import HotReplacementComponent from 'ember-cli-hot-loader/components/hot-replacement-component';
+import { get, computed } from '@ember/object';
+import config from 'ember-get-config';
 import { captureTemplateOptions } from 'ember-cli-hot-loader/utils/clear-container-cache';
 
 function removeOriginalFromParsedName (parsedName) {
@@ -23,6 +25,10 @@ export default Mixin.create({
 
     const resolved = this._super(...arguments);
     if (parsedName.type === 'component') {
+      const excluded = get(this, 'excluded');
+      if (excluded.some((name) => name === parsedName.name)) {
+        return this._super(parsedName);
+      }
       if (resolved) {
         return this._resolveComponent(resolved, parsedName);
       }
@@ -52,5 +58,9 @@ export default Mixin.create({
     const templateFullName = `template:components/${parsedName.fullNameWithoutType}-original`;
     const templateParsedName = this.parseName(templateFullName);
     return this.resolveTemplate(templateParsedName) || this.resolveOther(templateParsedName);
-  }
+  },
+  excluded: computed(function() {
+    const exclude = config['ember-cli-hot-loader']['excluded'];
+    return exclude || [];
+  })
 });
