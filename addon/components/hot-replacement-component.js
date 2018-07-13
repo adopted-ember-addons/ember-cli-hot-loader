@@ -3,6 +3,7 @@ import { later } from '@ember/runloop';
 import Component from '@ember/component';
 import { computed } from '@ember/object';
 import HotComponentMixin from 'ember-cli-hot-loader/mixins/hot-component';
+import config from 'ember-get-config';
 
 import clearCache from 'ember-cli-hot-loader/utils/clear-container-cache';
 import clearRequirejs from 'ember-cli-hot-loader/utils/clear-requirejs';
@@ -58,6 +59,13 @@ function getPositionalParamsArray (constructor) {
 }
 
 const HotReplacementComponent = Component.extend(HotComponentMixin, {
+  init() {
+    const configuration = config['ember-cli-hot-loader'];
+    const tagless = configuration && configuration['tagless'];
+    const tagName = tagless ? '' : 'div';
+    this.set('tagName', tagName);
+    return this._super();
+  },
   parsedName: null,
   layout: computed(function () {
     let positionalParams = getPositionalParamsArray(this.constructor).join('');
