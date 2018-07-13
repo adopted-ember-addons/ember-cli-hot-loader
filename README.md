@@ -40,6 +40,19 @@ if (environment === 'development') {
 }
 ```
 
+## Tagless wrapper component
+
+If you prefer to avoid the extra div that wraps each hot reloaded component configure it with tagless. Note: the tagless configuration does not support components that receive controller actions.
+
+```javascript
+//my-app/config/environment.js
+if (environment === 'development') {
+  ENV['ember-cli-hot-loader'] = {
+    tagless: true
+  }
+}
+```
+
 ## Example application
 
 An example application that hot reloads styles/components/reducers

@@ -23,7 +23,7 @@ module.exports = {
 
     var config = app.project.config('development');
     var addonConfig = config[this.name] || { supportedTypes: ['components'] };
-    this.supportedTypes = addonConfig['supportedTypes'];
+    this.supportedTypes = addonConfig['supportedTypes'] || ['components'];
 
     var npmCompilerPath = path.join('ember-source', 'dist', 'ember-template-compiler.js');
     var npmPath = path.relative(app.project.root, require.resolve(npmCompilerPath));
