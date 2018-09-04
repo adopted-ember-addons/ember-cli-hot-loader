@@ -23,15 +23,15 @@ export default Mixin.create({
     return TEMPLATE_MATCH_REGEX;
   }),
   originalComponentPostfix: computed(function(){
-	return ORIGINAL_COMPONENT_POSTFIX;
+    return ORIGINAL_COMPONENT_POSTFIX;
   }),
   shouldExcludeComponent(parsedName) {
-	const excluded = get(this, 'excluded');
-	if (excluded.some((name) => name === parsedName.name)) {
-        return true;
-	} else {
-		return false;
-	}
+    const excluded = get(this, 'excluded');
+    if (excluded.some((name) => name === parsedName.name)) {
+      return true;
+    } else {
+      return false;
+    }
   },
   resolveOther(parsedName) {
     captureTemplateOptions(parsedName);
@@ -43,7 +43,7 @@ export default Mixin.create({
     const resolved = this._super(...arguments);
     if (parsedName.type === 'component') {
       if (this.shouldExcludeComponent(parsedName)) {
-		return this._super(parsedName);
+        return this._super(parsedName);
       }
       if (resolved) {
         return this._resolveComponent(resolved, parsedName);
