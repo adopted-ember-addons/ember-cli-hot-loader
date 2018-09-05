@@ -14,6 +14,10 @@ module.exports = {
     var lsReloader = require('./lib/hot-reloader')(config.options, this.supportedTypes);
     lsReloader.run();
   },
+  _getTemplateCompilerPath() {
+    var npmCompilerPath = path.join('ember-source', 'dist', 'ember-template-compiler.js');
+    return path.relative(this.project.root, require.resolve(npmCompilerPath));
+  },
   included: function (app) {
     this._super.included(app);
 
@@ -24,9 +28,7 @@ module.exports = {
     var config = app.project.config('development');
     var addonConfig = config[this.name] || { supportedTypes: ['components'] };
     this.supportedTypes = addonConfig['supportedTypes'] || ['components'];
-
-    var npmCompilerPath = path.join('ember-source', 'dist', 'ember-template-compiler.js');
-    var npmPath = path.relative(app.project.root, require.resolve(npmCompilerPath));
+    var npmPath = addonConfig['templateCompilerPath'] || this._getTemplateCompilerPath();
 
     // Require template compiler as in CLI this is only used in build, we need it at runtime
     if (fs.existsSync(npmPath)) {
