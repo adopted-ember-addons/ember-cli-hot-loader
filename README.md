@@ -40,6 +40,29 @@ if (environment === 'development') {
 }
 ```
 
+## Extended components exclusion
+
+If you want to get more control over any component(s) excluding from hot reloading you can implement custom logic in resolver mixin method, named `shouldExcludeComponent`.
+
+For example if we don't want to reload `ember-bootstrap` components -
+we need to exclude all components with names started with `bs-` prefix.
+
+```javascript
+import Resolver from 'ember-resolver';
+import HotReloadMixin from 'ember-cli-hot-loader/mixins/hot-reload-resolver';
+
+const CustomHotReloadMixin = HotReloadMixin.extend({
+  shouldExcludeComponent({name}) {
+    const excludedFromConfig = this._super(...arguments);
+    const isBootstrapComponent = name.startsWith('bs-');
+    return excludedFromConfig || isBootstrapComponent;
+  }
+});
+
+export default Resolver.extend(CustomHotReloadMixin);
+```
+
+
 ## Tagless wrapper component
 
 If you prefer to avoid the extra div that wraps each hot reloaded component configure it with tagless. Note: the tagless configuration does not support components that receive controller actions.
