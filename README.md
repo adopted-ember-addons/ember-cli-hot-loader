@@ -47,11 +47,14 @@ If you want to get more control over any component(s) excluding from hot reloadi
 For example if we don't want to reload `ember-bootstrap` components -
 we need to exclude all components with names started with `bs-` prefix.
 
+Working example available at [lifeart/ember-hot-reload-demo](https://github.com/lifeart/ember-hot-reload-demo) (bs + non-reloadable `bs-button` component)
+
 ```javascript
 import Resolver from 'ember-resolver';
 import HotReloadMixin from 'ember-cli-hot-loader/mixins/hot-reload-resolver';
+import Mixin from '@ember/object/mixin';
 
-const CustomHotReloadMixin = HotReloadMixin.extend({
+const CustomHotReloadMixin = Mixin.create(HotReloadMixin, {
   shouldExcludeComponent({name}) {
     const excludedFromConfig = this._super(...arguments);
     const isBootstrapComponent = name.startsWith('bs-');
