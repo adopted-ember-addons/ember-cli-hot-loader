@@ -99,6 +99,9 @@ const HotReplacementComponent = Component.extend(HotComponentMixin, {
       clearRequirejs(this, baseComponentName);
     }
   },
+  __isAlive() {
+    return  !this.isDestroyed && !this.isDestroying;
+  },
   __rerenderOnTemplateUpdate (modulePath) {
       const baseComponentName = this.get('baseComponentName');
       const wrappedComponentName = this.get('wrappedComponentName');
@@ -112,6 +115,9 @@ const HotReplacementComponent = Component.extend(HotComponentMixin, {
           });
           this.rerender();
           later(() => {
+            if (!this.__isAlive()) {
+                return;
+            }
             this.setProperties({
               wrappedComponentName: wrappedComponentName,
               baseComponentName: baseComponentName
