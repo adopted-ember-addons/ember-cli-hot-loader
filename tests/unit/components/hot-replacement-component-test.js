@@ -82,8 +82,8 @@ test('checkTemplatesCacheWipe', async function (assert) {
     // lets escape from possible cache cleanup
 	clearTimeout(TemplateCacheCheckTimeout)
 	const cacheCheckerTimeout = 10;
-    let cachedItems = Object.keys(TemplatesCache);
-    let itemsToAddToCache = TEMPLATE_CACHE_MAX_SIZE - cachedItems.length;
+    const cachedItems = Object.keys(TemplatesCache);
+    const itemsToAddToCache = TEMPLATE_CACHE_MAX_SIZE - cachedItems.length;
     for (let i = 0; i < itemsToAddToCache; i++) {
         TemplatesCache[`key-${Math.random().toString(36).slice(2)}`] = {};
     }
