@@ -36,14 +36,14 @@ export function hashString(str) {
 }
 
 // Object keys may be so expensive on large objects (on 10k, ~ 6ms), so it's kinda debounce logic
-export function checkTemplatesCacheLimit() {
+export function checkTemplatesCacheLimit(timeout = TEMPLATE_CACHE_GC_TIMEOUT) {
     // allow only 10k component templates in cache
     clearTimeout(TemplateCacheCheckTimeout);
     TemplateCacheCheckTimeout = setTimeout(()=>{
         if (Object.keys(TemplatesCache).length > TEMPLATE_CACHE_MAX_SIZE) {
             TemplatesCache = {};
         }
-    }, TEMPLATE_CACHE_GC_TIMEOUT);
+    }, timeout);
 }
 
 export function matchesPodConvention (componentName, modulePath) {

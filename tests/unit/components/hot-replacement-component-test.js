@@ -1,6 +1,6 @@
 import { module } from 'qunit';
 import { test } from 'ember-qunit';
-import { TEMPLATE_CACHE_MAX_SIZE, TEMPLATE_CACHE_GC_TIMEOUT, TemplatesCache, TemplateCacheCheckTimeout, checkTemplatesCacheLimit, hashString, matchingComponent, matchesPodConvention, matchesClassicConvention } from 'ember-cli-hot-loader/components/hot-replacement-component';
+import { TEMPLATE_CACHE_MAX_SIZE, TemplatesCache, TemplateCacheCheckTimeout, checkTemplatesCacheLimit, hashString, matchingComponent, matchesPodConvention, matchesClassicConvention } from 'ember-cli-hot-loader/components/hot-replacement-component';
 import { Promise as EmberPromise } from 'rsvp';
 // NOTE: we test the functions of the class, not really the component
 // as a component, for that we'll write integration or acceptance tests
@@ -79,20 +79,21 @@ test('templateCacheMustBeAnNonNullableObject', function (assert) {
 });
 
 test('checkTemplatesCacheWipe', async function (assert) {
-    // lets wait for possible cache cleanup
-    await wait(TEMPLATE_CACHE_GC_TIMEOUT);
+    // lets escape from possible cache cleanup
+	clearTimeout(TemplateCacheCheckTimeout)
+	const cacheCheckerTimeout = 10;
     let cachedItems = Object.keys(TemplatesCache);
     let itemsToAddToCache = TEMPLATE_CACHE_MAX_SIZE - cachedItems.length;
     for (let i = 0; i < itemsToAddToCache; i++) {
         TemplatesCache[`key-${Math.random().toString(36).slice(2)}`] = {};
     }
     assert.equal(Object.keys(TemplatesCache).length, TEMPLATE_CACHE_MAX_SIZE, 'cache is full');
-    checkTemplatesCacheLimit();
-    await wait(TEMPLATE_CACHE_GC_TIMEOUT);
+    checkTemplatesCacheLimit(cacheCheckerTimeout);
+    await wait(cacheCheckerTimeout);
     assert.equal(Object.keys(TemplatesCache).length, TEMPLATE_CACHE_MAX_SIZE, 'cache is full, but not cleaned');
     TemplatesCache[`key-foo-bar`] = {};
     assert.notEqual(Object.keys(TemplatesCache).length, TEMPLATE_CACHE_MAX_SIZE, 'cache size if perfect to clean');
-    checkTemplatesCacheLimit();
-    await wait(TEMPLATE_CACHE_GC_TIMEOUT);
+    checkTemplatesCacheLimit(cacheCheckerTimeout);
+    await wait(cacheCheckerTimeout);
     assert.equal(Object.keys(TemplatesCache).length, 0, 'cache cleaned');
 });
