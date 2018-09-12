@@ -13,12 +13,14 @@ function regexEscape(s) {
 }
 
 
-const TEMPLATE_CACHE_MAX_SIZE = 10000;
-const TEMPLATE_CACHE_GC_TIMEOUT = 1000;
-var TemplatesCache = {};
-var TemplateCacheCheckTimeout = null;
+export const TEMPLATE_CACHE_MAX_SIZE = 10000;
+export const TEMPLATE_CACHE_GC_TIMEOUT = 1000;
 
-function hashString(str) {
+export var TemplatesCache = {};
+export var TemplateCacheCheckTimeout = null;
+// this is fast-hashing function for string, taken from
+// https://stackoverflow.com/questions/7616461/generate-a-hash-from-string-in-javascript
+export function hashString(str) {
 
     let hash = 0;
     if (str.length == 0) {
@@ -33,7 +35,8 @@ function hashString(str) {
 
 }
 
-function checkTemplatesCacheLimit() {
+// Object keys may be so expensive on large objects (on 10k, ~ 6ms), so it's kinda debounce logic
+export function checkTemplatesCacheLimit() {
     // allow only 10k component templates in cache
     clearTimeout(TemplateCacheCheckTimeout);
     TemplateCacheCheckTimeout = setTimeout(()=>{
