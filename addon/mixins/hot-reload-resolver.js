@@ -11,7 +11,7 @@ const TEMPLATE_MATCH_REGEX = new RegExp(/-original$/);
 function removeOriginalFromParsedName (parsedName, pattern) {
   parsedName.fullName = parsedName.fullName.replace(pattern, '');
   parsedName.fullNameWithoutType = parsedName.fullNameWithoutType.replace(pattern, '');
-  parsedName.name= parsedName.name.replace(pattern, '');
+  parsedName.name = parsedName.name.replace(pattern, '');
 }
 
 function shouldIgnoreTemplate (parsedName, pattern) {
@@ -36,14 +36,15 @@ export default Mixin.create({
   resolveOther(parsedName) {
     captureTemplateOptions(parsedName);
     const templateMatchRegex = get(this, 'originalTemplateMatchRegex');
-    if (parsedName.type === 'template' && shouldIgnoreTemplate(parsedName, templateMatchRegex)) {
-      return;
-    }
-
     const resolved = this._super(...arguments);
+
+    if (parsedName.type === 'template' && shouldIgnoreTemplate(parsedName, templateMatchRegex)) {
+      return resolved;
+    }
+    
     if (parsedName.type === 'component') {
       if (this.shouldExcludeComponent(parsedName)) {
-        return this._super(parsedName);
+        return resolved;
       }
       if (resolved) {
         return this._resolveComponent(resolved, parsedName);
