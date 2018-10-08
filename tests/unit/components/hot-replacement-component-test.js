@@ -15,8 +15,6 @@ function wait(ms) {
 test('matchingComponent for posix and windows modulePaths', function (assert) {
   assert.ok(matchingComponent('header-markup', '/Users/billut/code/rando/todomvc/app/templates/components/header-markup.hbs'));
   assert.ok(matchingComponent('header-markup', '\\Users\\billut\\code\\rando\\todomvc\\app\\templates\\components\\header-markup.hbs'));
-  assert.ok(matchingComponent('x-prefixed/header-markup', '/Users/billut/code/rando/todomvc/app/templates/components/x-prefixed/header-markup.hbs'))
-  assert.ok(matchingComponent('x-prefixed/header-markup', '\\Users\\billut\\code\\rando\\todomvc\\app\\templates\\components\\x-prefixed\\header-markup.hbs'));
 });
 
 test('typescript matches found', function (assert) {
