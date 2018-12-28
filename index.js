@@ -19,7 +19,7 @@ module.exports = {
     return path.relative(this.project.root, require.resolve(npmCompilerPath));
   },
   included: function (app) {
-    this._super.included(app);
+    this._super.included.apply(this, arguments);
 
     if (app.env === 'production' || app.env === 'test') {
       return;
